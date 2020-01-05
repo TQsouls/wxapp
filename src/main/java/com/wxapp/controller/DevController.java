@@ -4,13 +4,12 @@ import com.wxapp.api.friend.FriendAction;
 import com.wxapp.api.login.A16Login;
 import com.wxapp.api.login.Data62Login;
 import com.wxapp.api.msg.SendMsg;
+import com.wxapp.entity.msg.ImageMeg;
 import com.wxapp.entity.msg.TextMsg;
 import com.wxapp.entity.A16User;
 import com.wxapp.entity.Data62User;
 import com.wxapp.entity.GetFriendListInfo;
-import com.wxapp.task.A16LoginTask;
-import com.wxapp.task.Data62LoginTask;
-import com.wxapp.task.GetFriendListTask;
+import com.wxapp.task.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -76,14 +75,32 @@ public class DevController {
         return returnStr;
     }
 
-//    //群发文本消息
-//    @PostMapping("/app/Message/SendTxtMessage")
-//    public String sendTxtMessage(List<TextMsg> textMsgList){
-//        List<Future<String>> futureList = new ArrayList<>();
-//        for (TextMsg textMsg : textMsgList) {
-//
-//        }
-//    }
+    //群发文本消息
+    @PostMapping("/app/Message/SendTxtMessage")
+    public String sendTxtMessage(@RequestBody List<TextMsg> textMsgList){
+        List<Future<String>> futureList = new ArrayList<>();
+        for (TextMsg textMsg : textMsgList) {
+            Future<String> submit = executorService.submit(new SendTextMsgTask(sendMsg, textMsg));
+            futureList.add(submit);
+        }
+        String returnStr = getFutureJSON(futureList);
+        return returnStr;
+    }
+
+    //发送图片消息
+    @PostMapping("/app/Message/SendImageMessage")
+    public String sendImageMessage(@RequestBody List<ImageMeg> imageMegList){
+        List<Future<String>> futureList = new ArrayList<>();
+        for (ImageMeg imageMeg : imageMegList) {
+            Future<String> submit = executorService.submit(new SendImageMsgTask(sendMsg, imageMeg));
+            futureList.add(submit);
+        }
+
+        String returnStr = getFutureJSON(futureList);
+        return returnStr;
+    }
+
+
 
     //获取json串，测试功能
     private String getFutureJSON(List<Future<String>> futureList){
