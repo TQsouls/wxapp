@@ -1,10 +1,10 @@
 package com.wxapp.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.wxapp.bean.FriendCircle;
+import com.wxapp.entity.FriendCircle;
 import com.wxapp.bean.FriendList;
 import com.wxapp.bean.FriendOne;
-import com.wxapp.bean.User;
+import com.wxapp.entity.*;
 import com.wxapp.entity.msg.ImageMeg;
 import com.wxapp.entity.msg.TextMsg;
 import com.wxapp.api.friend.FriendAction;
@@ -14,9 +14,6 @@ import com.wxapp.api.login.A16Login;
 import com.wxapp.api.login.Data62Login;
 import com.wxapp.api.msg.SendMsg;
 import com.wxapp.api.user.UserOperating;
-import com.wxapp.entity.A16User;
-import com.wxapp.entity.Data62User;
-import com.wxapp.entity.GetFriendListInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -112,8 +109,8 @@ public class MainController {
 
     //设置微信号
     @GetMapping("/user/SetAlisa")
-    public String setAlisa(String alisa,String wxId){
-        return userOperating.setAlisa(alisa, wxId);
+    public String setAlisa(Alisa alisa){
+        return userOperating.setAlisa(alisa);
     }
 
     //创建群聊

@@ -1,6 +1,8 @@
 package com.wxapp.entity;
 
-public class GetFriendListInfo {
+import java.io.Serializable;
+
+public class GetFriendListInfo implements Serializable {
     private String wxId;
     private String currentWxcontactSeq;
     private String currentChatRoomContactSeq;

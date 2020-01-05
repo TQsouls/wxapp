@@ -1,4 +1,6 @@
-package com.wxapp.bean;
+package com.wxapp.entity;
+
+import java.io.Serializable;
 
 /**
  * 一个用户
@@ -12,7 +14,7 @@ package com.wxapp.bean;
  *   "wxId": "string"
  * }
  */
-public class User {
+public class User implements Serializable {
     private String nickName;
     private String sex;
     private String country;

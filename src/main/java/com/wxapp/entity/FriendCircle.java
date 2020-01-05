@@ -1,5 +1,8 @@
-package com.wxapp.bean;
+package com.wxapp.entity;
 
+import com.wxapp.bean.MediaInfo;
+
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -28,7 +31,7 @@ import java.util.List;
  *      *   "wxId": "string"
  *      * }
  */
-public class FriendCircle {
+public class FriendCircle implements Serializable {
     private String type;
     private List<String> blackList;
     private List<String> withUserList;

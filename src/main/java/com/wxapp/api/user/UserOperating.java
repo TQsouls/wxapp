@@ -1,7 +1,8 @@
 package com.wxapp.api.user;
 
 import com.alibaba.fastjson.JSON;
-import com.wxapp.bean.User;
+import com.wxapp.entity.Alisa;
+import com.wxapp.entity.User;
 import com.wxapp.util.HttpclientUtil;
 import org.springframework.stereotype.Component;
 
@@ -63,12 +64,9 @@ public class UserOperating {
     /**
      * 设置微信号:/user/SetAlisa
      */
-    public String setAlisa(String alisa,String wxId){
+    public String setAlisa(Alisa alisa){
         String url = "http://47.110.75.232:8080/api/user/SetAlisa";
-        Map<String,String> dataMap = new HashMap<>();
-        dataMap.put("alisa",alisa);
-        dataMap.put("wxId",wxId);
-        String setAlisaResult = HttpclientUtil.doPost(url, dataMap);
+        String setAlisaResult = HttpclientUtil.doJSONPost(url, JSON.toJSONString(alisa));
         return setAlisaResult;
     }
 }
