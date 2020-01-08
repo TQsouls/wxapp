@@ -2,7 +2,6 @@ package com.wxapp.task;
 
 import com.wxapp.api.login.A16Login;
 import com.wxapp.entity.A16User;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.concurrent.Callable;
 
