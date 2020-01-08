@@ -180,6 +180,18 @@ public class DevController {
         return returnStr;
     }
 
+    //下载通讯录
+    @PostMapping("/api/Login/GetMFriend")
+    public String getMFriend(List<GetFriend> getFriendList){
+        List<Future<String>> futureList = new ArrayList<>();
+        for (GetFriend getFriend : getFriendList) {
+            Future<String> submit = executorService.submit(new GetMFriendTask(friendAction, getFriend));
+            futureList.add(submit);
+        }
+        String returnStr = getFutureJSON(futureList);
+        return returnStr;
+    }
+
     //获取json串，测试功能
     private String getFutureJSON(List<Future<String>> futureList){
         String returnStr = "[";
