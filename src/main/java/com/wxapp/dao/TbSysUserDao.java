@@ -1,11 +1,7 @@
 package com.wxapp.dao;
 
 import com.wxapp.dbbean.TbSysUser;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
-import org.springframework.stereotype.Service;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 //+--------------+-------------+------+-----+---------+----------------+
@@ -27,7 +23,7 @@ import java.util.List;
 //  private String userName;
 //  private String userIsValid;
 
-@Service
+@Mapper
 public interface TbSysUserDao {
     @Select("SELECT user_id,user_account,user_pwd,user_cdkey,user_role,user_name,user_isValid " +
             "FROM tb_sys_user")
