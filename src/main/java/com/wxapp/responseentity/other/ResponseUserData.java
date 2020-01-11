@@ -1,5 +1,7 @@
 package com.wxapp.responseentity.other;
 
+import com.wxapp.dbbean.TbUserAccountEntity;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -27,30 +29,30 @@ import java.util.List;
  *  * },
  */
 public class ResponseUserData implements Serializable {
-    private List<ResponseUser> success;
-    private List<String> error;
+    private List<TbUserAccountEntity> success;
+    private List<TbUserAccountEntity> error;
 
     public ResponseUserData( ) {
     }
 
-    public ResponseUserData(List<ResponseUser> success, List<String> error) {
+    public ResponseUserData(List<TbUserAccountEntity> success, List<TbUserAccountEntity> error) {
         this.success = success;
         this.error = error;
     }
 
-    public List<ResponseUser> getSuccess() {
+    public List<TbUserAccountEntity> getSuccess() {
         return success;
     }
 
-    public void setSuccess(List<ResponseUser> success) {
+    public void setSuccess(List<TbUserAccountEntity> success) {
         this.success = success;
     }
 
-    public List<String> getError() {
+    public List<TbUserAccountEntity> getError() {
         return error;
     }
 
-    public void setError(List<String> error) {
+    public void setError(List<TbUserAccountEntity> error) {
         this.error = error;
     }
 }

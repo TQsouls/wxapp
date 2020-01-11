@@ -1,11 +1,13 @@
 package com.wxapp.service.impl;
 
 import com.wxapp.dao.TbUserAccountDao;
-import com.wxapp.entity.A16User;
-import com.wxapp.entity.Data62User;
+import com.wxapp.dbbean.TbUserAccountEntity;
 import com.wxapp.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import redis.clients.jedis.Jedis;
+
+import java.util.List;
+
 
 public class LoginServiceImpl implements LoginService {
 
@@ -15,14 +17,8 @@ public class LoginServiceImpl implements LoginService {
     TbUserAccountDao tbUserAccountDao;
 
     @Override
-    public String a16login(String returnStr, A16User a16User) {
-
-        return null;
-    }
-
-    @Override
-    public String data62login(String returnStr, Data62User data62User) {
-        //JSON.parseArray(returnStr,)
+    public String login(List<TbUserAccountEntity> successList) {
+        tbUserAccountDao.saveAll(successList);//批处理还没有配置
         return null;
     }
 }

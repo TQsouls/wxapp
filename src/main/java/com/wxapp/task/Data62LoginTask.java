@@ -3,10 +3,9 @@ package com.wxapp.task;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.wxapp.api.login.Data62Login;
-import com.wxapp.entity.A16User;
+import com.wxapp.dbbean.TbUserAccountEntity;
 import com.wxapp.entity.Data62User;
 import com.wxapp.requestentity.other.LoginUser;
-import com.wxapp.responseentity.other.ResponseUser;
 
 import java.util.concurrent.Callable;
 
@@ -44,20 +43,29 @@ public class Data62LoginTask implements Callable<String> {
         System.out.println(a16LoginInfo);
         JSONObject data = JSON.parseObject(JSON.parseObject(a16LoginInfo).get("Data").toString());
 
-        JSONObject baseResponse = JSON.parseObject(data.get("baseResponse").toString());
-        JSONObject accountInfo = JSON.parseObject(data.get("accountInfo").toString());
-        String wxId = accountInfo.get("wxid").toString();
+        try {
+            JSONObject baseResponse = JSON.parseObject(data.get("baseResponse").toString());
+            JSONObject accountInfo = JSON.parseObject(data.get("accountInfo").toString());
+            String wxId = accountInfo.get("wxid").toString();
 
-        Object errMsg = baseResponse.get("errMsg");
-        System.out.println(errMsg);
+            Object errMsg = baseResponse.get("errMsg");
+            System.out.println(errMsg);
 
-        ResponseUser responseUser = new ResponseUser(
-                data62User.getUserName(), data62User.getPassword(), data62User.getData62(),
-                "tag_name", "tag_id", "account_isValid",
-                "account_state", "account_friendCount",
-                wxId, "group_name", group_id, "user_id"
-        );
-        return JSON.toJSONString(responseUser);
-
+            TbUserAccountEntity responseUser = new TbUserAccountEntity(
+                    data62User.getUserName(), data62User.getPassword(), data62User.getData62(),
+                    true, true, 0,
+                    wxId, "0",
+                    "tag_name", "group_name", "groupId", "user_id"
+            );
+            return JSON.toJSONString(responseUser);
+        }catch (Exception e){
+            TbUserAccountEntity responseUser = new TbUserAccountEntity(
+                    data62User.getUserName(), data62User.getPassword(), data62User.getData62(),
+                    true, true, 0,
+                    "error", "0",
+                    "tag_name", "group_name", "groupId", "user_id"
+            );
+            return JSON.toJSONString(responseUser);
+        }
     }
 }

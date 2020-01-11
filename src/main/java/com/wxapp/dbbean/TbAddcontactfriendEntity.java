@@ -1,5 +1,7 @@
 package com.wxapp.dbbean;
 
+import org.springframework.data.domain.Persistable;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -42,4 +44,5 @@ public class TbAddcontactfriendEntity {
     public int hashCode() {
         return Objects.hash(acfId, acfContent);
     }
+
 }

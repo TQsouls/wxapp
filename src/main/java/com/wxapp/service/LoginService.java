@@ -1,7 +1,8 @@
 package com.wxapp.service;
 
-import com.wxapp.entity.A16User;
-import com.wxapp.entity.Data62User;
+import com.wxapp.dbbean.TbUserAccountEntity;
+
+import java.util.List;
 
 /**
  * 这里写登录业务（每个微信账号的登录都会执行的业务）
@@ -21,7 +22,6 @@ import com.wxapp.entity.Data62User;
 //        +--------------+-------------+------+-----+---------+----------------+
 public interface LoginService {
 
-    String a16login(String returnStr, A16User a16User);
-    String data62login(String returnStr, Data62User data62User);
+    String login(List<TbUserAccountEntity> successList);
 
 }

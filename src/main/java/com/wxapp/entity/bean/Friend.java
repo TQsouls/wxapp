@@ -1,4 +1,4 @@
-package com.wxapp.bean;
+package com.wxapp.entity.bean;
 
 //加好友必须的信息
 public class Friend {

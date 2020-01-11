@@ -1,4 +1,4 @@
-package com.wxapp.bean;
+package com.wxapp.entity.bean;
 
 /**
  *   {
@@ -16,7 +16,7 @@ public class MediaInfo {
     private String height;
     private String totalSize;
 
-    public MediaInfo( ) {
+    public MediaInfo() {
     }
 
     public String getUrl() {

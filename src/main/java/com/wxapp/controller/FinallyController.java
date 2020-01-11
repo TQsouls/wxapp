@@ -4,10 +4,10 @@ package com.wxapp.controller;
 import com.alibaba.fastjson.JSON;
 import com.wxapp.api.login.A16Login;
 import com.wxapp.api.login.Data62Login;
+import com.wxapp.dbbean.TbUserAccountEntity;
 import com.wxapp.requestentity.LoginRequest;
 import com.wxapp.requestentity.other.LoginUser;
 import com.wxapp.responseentity.LoginResponse;
-import com.wxapp.responseentity.other.ResponseUser;
 import com.wxapp.responseentity.other.ResponseUserData;
 import com.wxapp.task.A16LoginTask;
 import com.wxapp.task.Data62LoginTask;
@@ -52,17 +52,18 @@ public class FinallyController {
                 futureList.add(submit);
             }
         }
-
-
-        List<String> error = new ArrayList<>();
-        List<ResponseUser> success = new ArrayList<>();
-
+        List<TbUserAccountEntity> error = new ArrayList<>();
+        List<TbUserAccountEntity> success = new ArrayList<>();
         for (Future<String> stringFuture : futureList) {
             String returnJson = null;
             try {
                 returnJson = stringFuture.get();
-                ResponseUser responseUser = JSON.parseObject(returnJson, ResponseUser.class);
-                success.add(responseUser);
+                TbUserAccountEntity responseUser = JSON.parseObject(returnJson, TbUserAccountEntity.class);
+                if (responseUser.getAccountWxid().equals("error")) {
+                    error.add(responseUser);
+                }else {
+                    success.add(responseUser);
+                }
                 System.out.println(JSON.toJSONString(success));
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -78,7 +79,6 @@ public class FinallyController {
         loginResponse.setData(responseUserData);
         loginResponse.setCode("code");
         loginResponse.setMsg("everything is OK");
-
         return JSON.toJSONString(loginResponse);
     }
 

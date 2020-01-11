@@ -1,4 +1,4 @@
-package com.wxapp.bean;
+package com.wxapp.entity.bean;
 
 import java.util.List;
 

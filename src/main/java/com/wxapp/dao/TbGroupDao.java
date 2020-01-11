@@ -1,4 +1,7 @@
 package com.wxapp.dao;
 
-public interface TbGroupDao {
+import com.wxapp.dbbean.TbGroupEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface TbGroupDao extends JpaRepository<TbGroupEntity,Integer> {
 }

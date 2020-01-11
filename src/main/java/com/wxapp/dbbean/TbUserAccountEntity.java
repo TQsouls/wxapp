@@ -14,6 +14,85 @@ public class TbUserAccountEntity {
     private Integer accountFriendCount;
     private String accountWxid;
 
+    //响应的字段
+    private String tagId;
+    private String tagName;
+    private String groupName;
+    private String groupId;
+    private String userId;
+
+    // a16User.getWechatAccount(), a16User.getWechatPassword(), a16User.getWechatA16Data(),
+    //                    "tag_name", "tag_id", true,
+    //                    true, 0,
+    //                    wxId, "group_name", group_id, "user_id"
+    public TbUserAccountEntity(String account, String accountPwd, String account62A16, boolean accountIsValid, Boolean accountState, Integer accountFriendCount, String accountWxid) {
+        this.account = account;
+        this.accountPwd = accountPwd;
+        this.account62A16 = account62A16;
+        this.accountIsValid = accountIsValid;
+        this.accountState = accountState;
+        this.accountFriendCount = accountFriendCount;
+        this.accountWxid = accountWxid;
+    }
+
+    public TbUserAccountEntity(String account, String accountPwd, String account62A16, boolean accountIsValid, Boolean accountState, Integer accountFriendCount, String accountWxid,String tagId, String tagName, String groupName, String groupId, String userId) {
+        this.account = account;
+        this.accountPwd = accountPwd;
+        this.account62A16 = account62A16;
+        this.accountIsValid = accountIsValid;
+        this.accountState = accountState;
+        this.accountFriendCount = accountFriendCount;
+        this.accountWxid = accountWxid;
+        this.tagId = tagId;
+        this.tagName = tagName;
+        this.groupName = groupName;
+        this.groupId = groupId;
+        this.userId = userId;
+    }
+
+    public TbUserAccountEntity() {
+    }
+
+    public String getTagId() {
+        return tagId;
+    }
+    @Transient
+    public void setTagId(String tagId) {
+        this.tagId = tagId;
+    }
+
+    public String getTagName() {
+        return tagName;
+    }
+    @Transient
+    public void setTagName(String tagName) {
+        this.tagName = tagName;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+    @Transient
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+
+    public String getGroupId() {
+        return groupId;
+    }
+    @Transient
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+    @Transient
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     @Id
     @Column(name = "account")
     public String getAccount() {

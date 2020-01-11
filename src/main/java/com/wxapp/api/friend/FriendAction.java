@@ -2,10 +2,10 @@ package com.wxapp.api.friend;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.wxapp.bean.FriendDelete;
-import com.wxapp.bean.FriendList;
-import com.wxapp.bean.FriendOne;
-import com.wxapp.bean.FriendVerify;
+import com.wxapp.entity.bean.FriendDelete;
+import com.wxapp.entity.bean.FriendList;
+import com.wxapp.entity.bean.FriendOne;
+import com.wxapp.entity.bean.FriendVerify;
 import com.wxapp.entity.GetFriend;
 import com.wxapp.entity.GetFriendListInfo;
 import com.wxapp.util.HttpclientUtil;

@@ -1,6 +1,6 @@
 package com.wxapp.entity;
 
-import com.wxapp.bean.MediaInfo;
+import com.wxapp.entity.bean.MediaInfo;
 
 import java.io.Serializable;
 import java.util.List;

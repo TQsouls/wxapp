@@ -1,4 +1,4 @@
-package com.wxapp.bean;
+package com.wxapp.entity.bean;
 
 public class FriendOne {
     private String userNameV1;

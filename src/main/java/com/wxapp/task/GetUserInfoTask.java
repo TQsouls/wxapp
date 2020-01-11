@@ -4,7 +4,7 @@ import com.wxapp.api.user.UserOperating;
 
 import java.util.concurrent.Callable;
 
-public class GetUserInfoTask implements Callable<String> {
+public class  GetUserInfoTask implements Callable<String> {
 
     private UserOperating userOperating;
     private String wxId;

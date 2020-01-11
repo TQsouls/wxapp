@@ -1,4 +1,4 @@
-package com.wxapp.bean;
+package com.wxapp.entity.bean;
 
 //好友验证
 
