@@ -1,6 +1,5 @@
 package com.wxapp.dbbean;
 
-
 public class TbPhonecontact {
 
   private long pcId;

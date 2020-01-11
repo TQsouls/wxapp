@@ -1,6 +1,5 @@
 package com.wxapp.dbbean;
 
-
 public class TbSendmsg {
 
   private long smId;

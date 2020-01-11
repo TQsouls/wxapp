@@ -1,5 +1,7 @@
 package com.wxapp.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.wxapp.api.contrats.UploadContratsApi;
 import com.wxapp.api.friend.FriendAction;
 import com.wxapp.api.friendcycle.FriendCircleApi;
@@ -67,7 +69,7 @@ public class DevController {
             futureList.add(submit);
         }
 
-        String returnStr  = getFutureJSON(futureList);
+        String returnStr  = data62loginJSON(futureList);
         return returnStr;
     }
 
@@ -192,12 +194,36 @@ public class DevController {
         return returnStr;
     }
 
-    //获取json串，测试功能
+    //获取json串，测试功能,通用，只获取 Data 的内容
     private String getFutureJSON(List<Future<String>> futureList){
         String returnStr = "[";
         for (Future<String> stringFuture : futureList) {
             try {
-                returnStr +=stringFuture.get();
+                String json = stringFuture.get();
+
+                json = JSON.parseObject(json).get("Data").toString();
+                returnStr += json;
+                returnStr+=",";
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+        returnStr = returnStr.substring(0,returnStr.length()-1)+"]";
+        return returnStr;
+    }
+
+    private String data62loginJSON(List<Future<String>> futureList){
+        String returnStr = "[";
+        for (Future<String> stringFuture : futureList) {
+            try {
+                String json = stringFuture.get();
+                JSONObject data = (JSONObject) JSON.parseObject(json).get("Data");
+                data.remove("dnsInfo");
+                data.remove("builtinIplist");
+                returnStr+=data.toJSONString();
+                returnStr+=",";
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {

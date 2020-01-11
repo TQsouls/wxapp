@@ -6,12 +6,13 @@ public class TbUserAccount {
   private String account;
   private String accountPwd;
   private String account62A16;
-  private String accountTag;
+  private long tagId;
   private String accountIsValid;
   private String accountState;
   private long accountFriendCount;
   private String accountWxid;
   private long userId;
+  private long groupId;
 
 
   public String getAccount() {
@@ -41,12 +42,12 @@ public class TbUserAccount {
   }
 
 
-  public String getAccountTag() {
-    return accountTag;
+  public long getTagId() {
+    return tagId;
   }
 
-  public void setAccountTag(String accountTag) {
-    this.accountTag = accountTag;
+  public void setTagId(long tagId) {
+    this.tagId = tagId;
   }
 
 
@@ -92,6 +93,15 @@ public class TbUserAccount {
 
   public void setUserId(long userId) {
     this.userId = userId;
+  }
+
+
+  public long getGroupId() {
+    return groupId;
+  }
+
+  public void setGroupId(long groupId) {
+    this.groupId = groupId;
   }
 
 }
