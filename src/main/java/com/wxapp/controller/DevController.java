@@ -1,5 +1,7 @@
 package com.wxapp.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.wxapp.api.contrats.UploadContratsApi;
 import com.wxapp.api.friend.FriendAction;
 import com.wxapp.api.friendcycle.FriendCircleApi;
@@ -67,7 +69,7 @@ public class DevController {
             futureList.add(submit);
         }
 
-        String returnStr  = getFutureJSON(futureList);
+        String returnStr  = data62loginJSON(futureList);
         return returnStr;
     }
 
@@ -110,7 +112,7 @@ public class DevController {
 
     //获取用户的个人信息
     @PostMapping("/app/user/get")
-    public String getUserInfo(List<String> wxIds){
+    public String getUserInfo(@RequestBody List<String> wxIds){
         List<Future<String>> futureList = new ArrayList<>();
         for (String wxId : wxIds) {
             Future<String> submit = executorService.submit(new GetUserInfoTask(userOperating, wxId));
@@ -122,7 +124,7 @@ public class DevController {
 
     //修改头像
     @PostMapping("/app/user/UploadHeadImage")
-    public String uploadHeadImage(List<UploadHeadImage> uploadHeadImageList){
+    public String uploadHeadImage(@RequestBody List<UploadHeadImage> uploadHeadImageList){
         List<Future<String>> futureList = new ArrayList<>();
         for (UploadHeadImage uploadHeadImage : uploadHeadImageList) {
             Future<String> submit = executorService.submit(new UploadHeadImageTask(uploadHeadImage, userOperating));
@@ -134,7 +136,7 @@ public class DevController {
 
     //修改资料
     @PostMapping("/app/user/UpdateProfile")
-    public String updateProfile(List<User> userList){
+    public String updateProfile(@RequestBody List<User> userList){
         List<Future<String>> futureList = new ArrayList<>();
         for (User user : userList) {
             Future<String> submit = executorService.submit(new ChangeUserInfoTask(userOperating, user));
@@ -146,7 +148,7 @@ public class DevController {
 
     //设置微信号
     @GetMapping("/app/user/SetAlisa")
-    public String setAlisa(List<Alisa> alisaList){
+    public String setAlisa(@RequestBody List<Alisa> alisaList){
         List<Future<String>> futureList = new ArrayList<>();
         for (Alisa alisa : alisaList) {
             Future<String> submit = executorService.submit(new SetAlisaTask(userOperating, alisa));
@@ -158,7 +160,7 @@ public class DevController {
 
     //发朋友圈
     @PostMapping("/app/FriendCircle/SendFriendCircle")
-    public String sendFriendCircle(List<FriendCircle> friendCircleList){
+    public String sendFriendCircle(@RequestBody List<FriendCircle> friendCircleList){
         List<Future<String>> futureList = new ArrayList<>();
         for (FriendCircle friendCircle : friendCircleList) {
             Future<String> submit = executorService.submit(new SendFriendCircleTask(friendCircleApi, friendCircle));
@@ -170,7 +172,7 @@ public class DevController {
 
     //上传通讯录
     @PostMapping("/app/Common/UploadContrats")
-    public String uploadContrats(List<Contrat> contratList){
+    public String uploadContrats(@RequestBody List<Contrat> contratList){
         List<Future<String>> futureList = new ArrayList<>();
         for (Contrat contrat : contratList) {
             Future<String> submit = executorService.submit(new UploadContratsTask(uploadContratsApi, contrat));
@@ -180,12 +182,48 @@ public class DevController {
         return returnStr;
     }
 
-    //获取json串，测试功能
+    //下载通讯录
+    @PostMapping("/api/Login/GetMFriend")
+    public String getMFriend(@RequestBody List<GetFriend> getFriendList){
+        List<Future<String>> futureList = new ArrayList<>();
+        for (GetFriend getFriend : getFriendList) {
+            Future<String> submit = executorService.submit(new GetMFriendTask(friendAction, getFriend));
+            futureList.add(submit);
+        }
+        String returnStr = getFutureJSON(futureList);
+        return returnStr;
+    }
+
+    //获取json串，测试功能,通用，只获取 Data 的内容
     private String getFutureJSON(List<Future<String>> futureList){
         String returnStr = "[";
         for (Future<String> stringFuture : futureList) {
             try {
-                returnStr +=stringFuture.get();
+                String json = stringFuture.get();
+
+                json = JSON.parseObject(json).get("Data").toString();
+                returnStr += json;
+                returnStr+=",";
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+        returnStr = returnStr.substring(0,returnStr.length()-1)+"]";
+        return returnStr;
+    }
+
+    private String data62loginJSON(List<Future<String>> futureList){
+        String returnStr = "[";
+        for (Future<String> stringFuture : futureList) {
+            try {
+                String json = stringFuture.get();
+                JSONObject data = (JSONObject) JSON.parseObject(json).get("Data");
+                data.remove("dnsInfo");
+                data.remove("builtinIplist");
+                returnStr+=data.toJSONString();
+                returnStr+=",";
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {

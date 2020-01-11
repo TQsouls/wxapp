@@ -3,7 +3,7 @@ package com.wxapp.api.friendcycle;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.wxapp.entity.FriendCircle;
-import com.wxapp.bean.FriendCircleImage;
+import com.wxapp.entity.bean.FriendCircleImage;
 import com.wxapp.util.HttpclientUtil;
 import org.springframework.stereotype.Component;
 
