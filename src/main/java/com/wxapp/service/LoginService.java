@@ -7,7 +7,6 @@ import com.wxapp.entity.Data62User;
  * 这里写登录业务（每个微信账号的登录都会执行的业务）
  * 登录后先记录账号
  * 查询好友列表并存储到缓存
- * 0000000000000000000000000000000000000000000000000000000000000001
  */
 //+--------------+-------------+------+-----+---------+----------------+
 //        | Field        | Type        | Null | Key | Default | Extra          |
@@ -23,7 +22,6 @@ import com.wxapp.entity.Data62User;
 public interface LoginService {
 
     String a16login(String returnStr, A16User a16User);
-
     String data62login(String returnStr, Data62User data62User);
 
 }

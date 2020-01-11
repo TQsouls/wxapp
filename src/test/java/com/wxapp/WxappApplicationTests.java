@@ -1,6 +1,8 @@
 package com.wxapp;
 
-import com.wxapp.dao.TbSysUserDao;
+
+import com.wxapp.dao.TbAddcontactfriendDao;
+import com.wxapp.dao.TbUserAccountDao;
 import com.wxapp.util.RedisUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +21,17 @@ class WxappApplicationTests {
     ExecutorService executor;
 
     @Autowired
-    TbSysUserDao tbSysUserDao;
+    TbAddcontactfriendDao tbAddcontactfriendDao;
 
     @Value("${the-most-thread-numbers}")
     private int theMostThreadNum;
 
+    @Autowired
+    TbUserAccountDao tbUserAccountDao;
+
     @Test
     void contextLoads() {
-        System.out.println(tbSysUserDao.getAll());
+        System.out.println(tbUserAccountDao.findAll());
     }
 
 }

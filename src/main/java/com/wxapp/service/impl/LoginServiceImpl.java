@@ -1,7 +1,6 @@
 package com.wxapp.service.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.wxapp.dao.TbSysUserDao;
+import com.wxapp.dao.TbUserAccountDao;
 import com.wxapp.entity.A16User;
 import com.wxapp.entity.Data62User;
 import com.wxapp.service.LoginService;
@@ -13,8 +12,7 @@ public class LoginServiceImpl implements LoginService {
     @Autowired
     Jedis jedis;//自动注入 redis
     @Autowired
-    TbSysUserDao tbSysUserDao;//自动注入对应表的操作
-
+    TbUserAccountDao tbUserAccountDao;
 
     @Override
     public String a16login(String returnStr, A16User a16User) {
