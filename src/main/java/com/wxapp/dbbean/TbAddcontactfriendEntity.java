@@ -8,9 +8,10 @@ import java.util.Objects;
 public class TbAddcontactfriendEntity {
     private int acfId;
     private String acfContent;
+    private int userId;
 
     @Id
-    @Column(name = "acf_id")
+    @Column(name = "acf_id", nullable = false)
     public int getAcfId() {
         return acfId;
     }
@@ -20,7 +21,7 @@ public class TbAddcontactfriendEntity {
     }
 
     @Basic
-    @Column(name = "acf_content")
+    @Column(name = "acf_content", nullable = true, length = 255)
     public String getAcfContent() {
         return acfContent;
     }
@@ -29,17 +30,28 @@ public class TbAddcontactfriendEntity {
         this.acfContent = acfContent;
     }
 
+    @Basic
+    @Column(name = "user_id", nullable = false)
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbAddcontactfriendEntity that = (TbAddcontactfriendEntity) o;
         return acfId == that.acfId &&
+                userId == that.userId &&
                 Objects.equals(acfContent, that.acfContent);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(acfId, acfContent);
+        return Objects.hash(acfId, acfContent, userId);
     }
 }

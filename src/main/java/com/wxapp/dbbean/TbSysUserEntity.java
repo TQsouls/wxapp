@@ -15,7 +15,7 @@ public class TbSysUserEntity {
     private boolean userIsValid;
 
     @Id
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     public int getUserId() {
         return userId;
     }
@@ -25,7 +25,7 @@ public class TbSysUserEntity {
     }
 
     @Basic
-    @Column(name = "user_account")
+    @Column(name = "user_account", nullable = false, length = 20)
     public String getUserAccount() {
         return userAccount;
     }
@@ -35,7 +35,7 @@ public class TbSysUserEntity {
     }
 
     @Basic
-    @Column(name = "user_pwd")
+    @Column(name = "user_pwd", nullable = false, length = 20)
     public String getUserPwd() {
         return userPwd;
     }
@@ -45,7 +45,7 @@ public class TbSysUserEntity {
     }
 
     @Basic
-    @Column(name = "user_cdkey")
+    @Column(name = "user_cdkey", nullable = true, length = 50)
     public String getUserCdkey() {
         return userCdkey;
     }
@@ -55,7 +55,7 @@ public class TbSysUserEntity {
     }
 
     @Basic
-    @Column(name = "user_role")
+    @Column(name = "user_role", nullable = false)
     public boolean isUserRole() {
         return userRole;
     }
@@ -65,7 +65,7 @@ public class TbSysUserEntity {
     }
 
     @Basic
-    @Column(name = "user_name")
+    @Column(name = "user_name", nullable = false, length = 20)
     public String getUserName() {
         return userName;
     }
@@ -75,7 +75,7 @@ public class TbSysUserEntity {
     }
 
     @Basic
-    @Column(name = "user_is_valid")
+    @Column(name = "user_is_valid", nullable = false)
     public boolean isUserIsValid() {
         return userIsValid;
     }

@@ -9,10 +9,11 @@ import java.util.Objects;
 public class TbTagEntity {
     private int tagId;
     private String tagName;
+    private int userId;
     private Timestamp tagCreateDate;
 
     @Id
-    @Column(name = "tag_id")
+    @Column(name = "tag_id", nullable = false)
     public int getTagId() {
         return tagId;
     }
@@ -22,7 +23,7 @@ public class TbTagEntity {
     }
 
     @Basic
-    @Column(name = "tag_name")
+    @Column(name = "tag_name", nullable = false, length = 50)
     public String getTagName() {
         return tagName;
     }
@@ -32,7 +33,17 @@ public class TbTagEntity {
     }
 
     @Basic
-    @Column(name = "tag_create_date")
+    @Column(name = "user_id", nullable = false)
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    @Basic
+    @Column(name = "tag_create_date", nullable = false)
     public Timestamp getTagCreateDate() {
         return tagCreateDate;
     }
@@ -47,12 +58,13 @@ public class TbTagEntity {
         if (o == null || getClass() != o.getClass()) return false;
         TbTagEntity that = (TbTagEntity) o;
         return tagId == that.tagId &&
+                userId == that.userId &&
                 Objects.equals(tagName, that.tagName) &&
                 Objects.equals(tagCreateDate, that.tagCreateDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(tagId, tagName, tagCreateDate);
+        return Objects.hash(tagId, tagName, userId, tagCreateDate);
     }
 }

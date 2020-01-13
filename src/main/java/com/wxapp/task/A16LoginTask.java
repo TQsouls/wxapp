@@ -52,16 +52,16 @@ public class A16LoginTask implements Callable<String> {
             TbUserAccountEntity responseUser = new TbUserAccountEntity(
                     a16User.getWechatAccount(), a16User.getWechatPassword(), a16User.getWechatA16Data(),
                     true, true, 0,
-                    wxId, "0",
-                    "tag_name", "group_name", "groupId", "user_id"
+                    wxId, 0,
+                    "tag_name", "group_name", 0, 0
             );
             return JSON.toJSONString(responseUser);
         } catch (Exception e) {
             TbUserAccountEntity responseUser = new TbUserAccountEntity(
                     a16User.getWechatAccount(), a16User.getWechatPassword(), a16User.getWechatA16Data(),
                     true, true, 0,
-                    "error", "0",
-                    "tag_name", "group_name", "groupId", "user_id"
+                    "error", 0,
+                    "tag_name", "group_name", 0, 0
             );
             return JSON.toJSONString(responseUser);
         }

@@ -9,10 +9,11 @@ import java.util.Objects;
 public class TbGroupEntity {
     private int groupId;
     private String groupName;
+    private int userId;
     private Timestamp groupCreateDate;
 
     @Id
-    @Column(name = "group_id")
+    @Column(name = "group_id", nullable = false)
     public int getGroupId() {
         return groupId;
     }
@@ -22,7 +23,7 @@ public class TbGroupEntity {
     }
 
     @Basic
-    @Column(name = "group_name")
+    @Column(name = "group_name", nullable = false, length = 50)
     public String getGroupName() {
         return groupName;
     }
@@ -32,7 +33,17 @@ public class TbGroupEntity {
     }
 
     @Basic
-    @Column(name = "group_create_date")
+    @Column(name = "user_id", nullable = false)
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    @Basic
+    @Column(name = "group_create_date", nullable = false)
     public Timestamp getGroupCreateDate() {
         return groupCreateDate;
     }
@@ -47,12 +58,13 @@ public class TbGroupEntity {
         if (o == null || getClass() != o.getClass()) return false;
         TbGroupEntity that = (TbGroupEntity) o;
         return groupId == that.groupId &&
+                userId == that.userId &&
                 Objects.equals(groupName, that.groupName) &&
                 Objects.equals(groupCreateDate, that.groupCreateDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(groupId, groupName, groupCreateDate);
+        return Objects.hash(groupId, groupName, userId, groupCreateDate);
     }
 }

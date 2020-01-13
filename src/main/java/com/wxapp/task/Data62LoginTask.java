@@ -54,16 +54,16 @@ public class Data62LoginTask implements Callable<String> {
             TbUserAccountEntity responseUser = new TbUserAccountEntity(
                     data62User.getUserName(), data62User.getPassword(), data62User.getData62(),
                     true, true, 0,
-                    wxId, "0",
-                    "tag_name", "group_name", "groupId", "user_id"
+                    wxId, 0,
+                    "tag_name", "group_name", 0, 0
             );
             return JSON.toJSONString(responseUser);
         }catch (Exception e){
             TbUserAccountEntity responseUser = new TbUserAccountEntity(
                     data62User.getUserName(), data62User.getPassword(), data62User.getData62(),
                     true, true, 0,
-                    "error", "0",
-                    "tag_name", "group_name", "groupId", "user_id"
+                    "error", 0,
+                    "tag_name", "group_name", 0, 0
             );
             return JSON.toJSONString(responseUser);
         }
