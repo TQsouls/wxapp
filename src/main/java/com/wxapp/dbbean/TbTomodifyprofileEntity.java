@@ -10,7 +10,7 @@ public class TbTomodifyprofileEntity {
     private String mpNewPwd;
     private String mpNickname;
     private String mpSignature;
-    private String mpAvatarurl;
+    private String mpAvatarUrl;
 
     @Id
     @Column(name = "mp_id")
@@ -53,13 +53,13 @@ public class TbTomodifyprofileEntity {
     }
 
     @Basic
-    @Column(name = "mp_avatarurl")
-    public String getMpAvatarurl() {
-        return mpAvatarurl;
+    @Column(name = "mp_avatar_url")
+    public String getMpAvatarUrl() {
+        return mpAvatarUrl;
     }
 
-    public void setMpAvatarurl(String mpAvatarurl) {
-        this.mpAvatarurl = mpAvatarurl;
+    public void setMpAvatarUrl(String mpAvatarUrl) {
+        this.mpAvatarUrl = mpAvatarUrl;
     }
 
     @Override
@@ -71,11 +71,11 @@ public class TbTomodifyprofileEntity {
                 Objects.equals(mpNewPwd, that.mpNewPwd) &&
                 Objects.equals(mpNickname, that.mpNickname) &&
                 Objects.equals(mpSignature, that.mpSignature) &&
-                Objects.equals(mpAvatarurl, that.mpAvatarurl);
+                Objects.equals(mpAvatarUrl, that.mpAvatarUrl);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(mpId, mpNewPwd, mpNickname, mpSignature, mpAvatarurl);
+        return Objects.hash(mpId, mpNewPwd, mpNickname, mpSignature, mpAvatarUrl);
     }
 }

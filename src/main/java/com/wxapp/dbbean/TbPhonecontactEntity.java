@@ -10,7 +10,7 @@ public class TbPhonecontactEntity {
     private String phoneNumber;
     private boolean phoneHasUsed;
     private String phoneMd5;
-    private String phoneOwnwxud;
+    private String phoneOwnWxid;
     private String phoneV1;
     private String phoneV2;
 
@@ -55,13 +55,13 @@ public class TbPhonecontactEntity {
     }
 
     @Basic
-    @Column(name = "phone_ownwxud")
-    public String getPhoneOwnwxud() {
-        return phoneOwnwxud;
+    @Column(name = "phone_own_wxid")
+    public String getPhoneOwnWxid() {
+        return phoneOwnWxid;
     }
 
-    public void setPhoneOwnwxud(String phoneOwnwxud) {
-        this.phoneOwnwxud = phoneOwnwxud;
+    public void setPhoneOwnWxid(String phoneOwnWxid) {
+        this.phoneOwnWxid = phoneOwnWxid;
     }
 
     @Basic
@@ -93,13 +93,13 @@ public class TbPhonecontactEntity {
                 phoneHasUsed == that.phoneHasUsed &&
                 Objects.equals(phoneNumber, that.phoneNumber) &&
                 Objects.equals(phoneMd5, that.phoneMd5) &&
-                Objects.equals(phoneOwnwxud, that.phoneOwnwxud) &&
+                Objects.equals(phoneOwnWxid, that.phoneOwnWxid) &&
                 Objects.equals(phoneV1, that.phoneV1) &&
                 Objects.equals(phoneV2, that.phoneV2);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(pcId, phoneNumber, phoneHasUsed, phoneMd5, phoneOwnwxud, phoneV1, phoneV2);
+        return Objects.hash(pcId, phoneNumber, phoneHasUsed, phoneMd5, phoneOwnWxid, phoneV1, phoneV2);
     }
 }
