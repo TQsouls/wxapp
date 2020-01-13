@@ -11,9 +11,10 @@ public class TbTomodifyprofileEntity {
     private String mpNickname;
     private String mpSignature;
     private String mpAvatarUrl;
+    private int userId;
 
     @Id
-    @Column(name = "mp_id")
+    @Column(name = "mp_id", nullable = false)
     public int getMpId() {
         return mpId;
     }
@@ -23,7 +24,7 @@ public class TbTomodifyprofileEntity {
     }
 
     @Basic
-    @Column(name = "mp_new_pwd")
+    @Column(name = "mp_new_pwd", nullable = true, length = 20)
     public String getMpNewPwd() {
         return mpNewPwd;
     }
@@ -33,7 +34,7 @@ public class TbTomodifyprofileEntity {
     }
 
     @Basic
-    @Column(name = "mp_nickname")
+    @Column(name = "mp_nickname", nullable = true, length = 20)
     public String getMpNickname() {
         return mpNickname;
     }
@@ -43,7 +44,7 @@ public class TbTomodifyprofileEntity {
     }
 
     @Basic
-    @Column(name = "mp_signature")
+    @Column(name = "mp_signature", nullable = true, length = 255)
     public String getMpSignature() {
         return mpSignature;
     }
@@ -53,7 +54,7 @@ public class TbTomodifyprofileEntity {
     }
 
     @Basic
-    @Column(name = "mp_avatar_url")
+    @Column(name = "mp_avatar_url", nullable = true, length = 255)
     public String getMpAvatarUrl() {
         return mpAvatarUrl;
     }
@@ -62,12 +63,23 @@ public class TbTomodifyprofileEntity {
         this.mpAvatarUrl = mpAvatarUrl;
     }
 
+    @Basic
+    @Column(name = "user_id", nullable = false)
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbTomodifyprofileEntity that = (TbTomodifyprofileEntity) o;
         return mpId == that.mpId &&
+                userId == that.userId &&
                 Objects.equals(mpNewPwd, that.mpNewPwd) &&
                 Objects.equals(mpNickname, that.mpNickname) &&
                 Objects.equals(mpSignature, that.mpSignature) &&
@@ -76,6 +88,6 @@ public class TbTomodifyprofileEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(mpId, mpNewPwd, mpNickname, mpSignature, mpAvatarUrl);
+        return Objects.hash(mpId, mpNewPwd, mpNickname, mpSignature, mpAvatarUrl, userId);
     }
 }

@@ -13,7 +13,7 @@ public class TbHadjoinedgroupaccountEntity {
     private String jgaNickname;
 
     @Id
-    @Column(name = "jga_id")
+    @Column(name = "jga_id", nullable = false)
     public int getJgaId() {
         return jgaId;
     }
@@ -23,7 +23,7 @@ public class TbHadjoinedgroupaccountEntity {
     }
 
     @Basic
-    @Column(name = "jga_wxid")
+    @Column(name = "jga_wxid", nullable = false, length = 20)
     public String getJgaWxid() {
         return jgaWxid;
     }
@@ -33,7 +33,7 @@ public class TbHadjoinedgroupaccountEntity {
     }
 
     @Basic
-    @Column(name = "jga_group_id")
+    @Column(name = "jga_group_id", nullable = false, length = 50)
     public String getJgaGroupId() {
         return jgaGroupId;
     }
@@ -43,7 +43,7 @@ public class TbHadjoinedgroupaccountEntity {
     }
 
     @Basic
-    @Column(name = "jga_phone")
+    @Column(name = "jga_phone", nullable = true, length = 15)
     public String getJgaPhone() {
         return jgaPhone;
     }
@@ -53,7 +53,7 @@ public class TbHadjoinedgroupaccountEntity {
     }
 
     @Basic
-    @Column(name = "jga_nickname")
+    @Column(name = "jga_nickname", nullable = true, length = 20)
     public String getJgaNickname() {
         return jgaNickname;
     }

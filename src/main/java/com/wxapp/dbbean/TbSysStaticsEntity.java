@@ -7,12 +7,13 @@ import java.util.Objects;
 @Table(name = "tb_sys_statics", schema = "app", catalog = "")
 public class TbSysStaticsEntity {
     private int ssId;
+    private int userId;
     private int ssAllOnlineCount;
     private int ssAllFriendCount;
     private int ssAllDeadCount;
 
     @Id
-    @Column(name = "ss_id")
+    @Column(name = "ss_id", nullable = false)
     public int getSsId() {
         return ssId;
     }
@@ -22,7 +23,17 @@ public class TbSysStaticsEntity {
     }
 
     @Basic
-    @Column(name = "ss_all_online_count")
+    @Column(name = "user_id", nullable = false)
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    @Basic
+    @Column(name = "ss_all_online_count", nullable = false)
     public int getSsAllOnlineCount() {
         return ssAllOnlineCount;
     }
@@ -32,7 +43,7 @@ public class TbSysStaticsEntity {
     }
 
     @Basic
-    @Column(name = "ss_all_friend_count")
+    @Column(name = "ss_all_friend_count", nullable = false)
     public int getSsAllFriendCount() {
         return ssAllFriendCount;
     }
@@ -42,7 +53,7 @@ public class TbSysStaticsEntity {
     }
 
     @Basic
-    @Column(name = "ss_all_dead_count")
+    @Column(name = "ss_all_dead_count", nullable = false)
     public int getSsAllDeadCount() {
         return ssAllDeadCount;
     }
@@ -57,6 +68,7 @@ public class TbSysStaticsEntity {
         if (o == null || getClass() != o.getClass()) return false;
         TbSysStaticsEntity that = (TbSysStaticsEntity) o;
         return ssId == that.ssId &&
+                userId == that.userId &&
                 ssAllOnlineCount == that.ssAllOnlineCount &&
                 ssAllFriendCount == that.ssAllFriendCount &&
                 ssAllDeadCount == that.ssAllDeadCount;
@@ -64,6 +76,6 @@ public class TbSysStaticsEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(ssId, ssAllOnlineCount, ssAllFriendCount, ssAllDeadCount);
+        return Objects.hash(ssId, userId, ssAllOnlineCount, ssAllFriendCount, ssAllDeadCount);
     }
 }
