@@ -6,12 +6,15 @@ package com.wxapp.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wxapp.dbbean.TbAddcontactfriendEntity;
+import com.wxapp.service.MarketingService;
 import com.wxapp.util.Result;
 
 /**
@@ -28,8 +31,11 @@ import com.wxapp.util.Result;
 
 @RestController
 @RequestMapping("/api/marketing")
-public class Marketing {
+public class MarketingController {
 
+	@Autowired
+	MarketingService marketingService;
+	
 	/**
 	 * 设置添加通讯录好友验证消息
 	 * @param content
@@ -37,10 +43,16 @@ public class Marketing {
 	 */
 	@PostMapping("setAddMsg")
 	public Result setAddMsg(@RequestBody HashMap<String, Object> map) {
-		Map<String, Object> data = new HashMap<String, Object>();
-		data.put("content", map.get("content"));
-		data.put("user_id", map.get("user_id"));
-		return Result.ok().put("data", data);
+		
+		TbAddcontactfriendEntity tae = new TbAddcontactfriendEntity();
+		tae.setAcfContent(map.get("content").toString());
+		tae.setAcfId(Integer.parseInt(map.get("user_id").toString()));
+		
+		int result = marketingService.save(tae);
+		if(result <= 0) {
+			return Result.ok(-1, "添加失败");
+		}
+		return Result.ok(0, "添加成功");
 	}
 	
 	/**

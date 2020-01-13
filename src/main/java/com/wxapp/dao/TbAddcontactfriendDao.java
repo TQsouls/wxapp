@@ -7,4 +7,8 @@ import java.util.List;
 
 public interface TbAddcontactfriendDao extends JpaRepository<TbAddcontactfriendEntity,Integer> {
 	
+	/**
+	 * 添加
+	 */
+	TbAddcontactfriendEntity save(TbAddcontactfriendEntity addcontactfriend);
 }
