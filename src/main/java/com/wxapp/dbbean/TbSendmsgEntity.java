@@ -8,9 +8,10 @@ import java.util.Objects;
 public class TbSendmsgEntity {
     private int smId;
     private String smMsg;
+    private int userId;
 
     @Id
-    @Column(name = "sm_id")
+    @Column(name = "sm_id", nullable = false)
     public int getSmId() {
         return smId;
     }
@@ -20,7 +21,7 @@ public class TbSendmsgEntity {
     }
 
     @Basic
-    @Column(name = "sm_msg")
+    @Column(name = "sm_msg", nullable = true, length = 255)
     public String getSmMsg() {
         return smMsg;
     }
@@ -29,17 +30,28 @@ public class TbSendmsgEntity {
         this.smMsg = smMsg;
     }
 
+    @Basic
+    @Column(name = "user_id", nullable = false)
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbSendmsgEntity that = (TbSendmsgEntity) o;
         return smId == that.smId &&
+                userId == that.userId &&
                 Objects.equals(smMsg, that.smMsg);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(smId, smMsg);
+        return Objects.hash(smId, smMsg, userId);
     }
 }

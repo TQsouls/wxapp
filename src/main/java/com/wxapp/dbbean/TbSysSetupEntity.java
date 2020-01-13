@@ -7,10 +7,11 @@ import java.util.Objects;
 @Table(name = "tb_sys_setup", schema = "app", catalog = "")
 public class TbSysSetupEntity {
     private int suId;
+    private int userId;
     private int suLoginShreshold;
 
     @Id
-    @Column(name = "su_id")
+    @Column(name = "su_id", nullable = false)
     public int getSuId() {
         return suId;
     }
@@ -20,7 +21,17 @@ public class TbSysSetupEntity {
     }
 
     @Basic
-    @Column(name = "su_login_shreshold")
+    @Column(name = "user_id", nullable = false)
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    @Basic
+    @Column(name = "su_login_shreshold", nullable = false)
     public int getSuLoginShreshold() {
         return suLoginShreshold;
     }
@@ -35,11 +46,12 @@ public class TbSysSetupEntity {
         if (o == null || getClass() != o.getClass()) return false;
         TbSysSetupEntity that = (TbSysSetupEntity) o;
         return suId == that.suId &&
+                userId == that.userId &&
                 suLoginShreshold == that.suLoginShreshold;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(suId, suLoginShreshold);
+        return Objects.hash(suId, userId, suLoginShreshold);
     }
 }
