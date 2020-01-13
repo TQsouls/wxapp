@@ -12,7 +12,7 @@ package com.wxapp.jsonbean;
 public class Account {
 
     private String from_wxid;
-    private String from_wxid2;
+
     public void setfrom_wxid(String from_wxid) {
          this.from_wxid = from_wxid;
      }
@@ -20,11 +20,5 @@ public class Account {
          return from_wxid;
      }
 
-    public void setfrom_wxid2(String from_wxid2) {
-         this.from_wxid2 = from_wxid2;
-     }
-     public String getfrom_wxid2() {
-         return from_wxid2;
-     }
 
 }

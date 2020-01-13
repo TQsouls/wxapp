@@ -18,10 +18,4 @@ public class A16Login {
         String loginJson = HttpclientUtil.doJSONPost(url, JSON.toJSONString(a16User));
         return loginJson;
     }
-
-    public String getWeixinId(JSONObject jsonObject){
-        Object data = jsonObject.get("Data");
-        Object accountInfo = JSON.parseObject(data+"").get("accountInfo");
-        return JSONObject.parseObject(accountInfo + "").get("wxid")+"";
-    }
 }

@@ -2,10 +2,11 @@ package com.wxapp.api.friend;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.wxapp.bean.FriendDelete;
-import com.wxapp.bean.FriendList;
-import com.wxapp.bean.FriendOne;
-import com.wxapp.bean.FriendVerify;
+import com.wxapp.entity.bean.FriendDelete;
+import com.wxapp.entity.bean.FriendList;
+import com.wxapp.entity.bean.FriendOne;
+import com.wxapp.entity.bean.FriendVerify;
+import com.wxapp.entity.GetFriend;
 import com.wxapp.entity.GetFriendListInfo;
 import com.wxapp.util.HttpclientUtil;
 import org.springframework.stereotype.Component;
@@ -161,5 +162,15 @@ public class FriendAction {
         String url = "http://47.110.75.232:8080/api/Friend/BatchDeleteFriend";
         String batchDeleteFriendResult = HttpclientUtil.doJSONPost(url, JSON.toJSONString(friendDelete));
         return (JSON.parseObject(batchDeleteFriendResult).get("Success")+"").equals("true");
+    }
+
+    /**
+     * 获取新的朋友列表
+     * http://47.110.75.232:8080/api/Login/GetMFriend/{wxId}/{type}
+     */
+    public String getMFriend(GetFriend getFriend){
+        String url = "http://47.110.75.232:8080/api/Login/GetMFriend/"+getFriend.getWxId()+"/"+getFriend.getType();
+        String getMFriendResult = HttpclientUtil.doPost(url, null);
+        return getMFriendResult;
     }
 }
