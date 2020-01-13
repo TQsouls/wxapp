@@ -9,7 +9,6 @@ public class TbUserAccountEntity {
     private String account;
     private String accountPwd;
     private String account62A16;
-    private String accountTag;
     private boolean accountIsValid;
     private Boolean accountState;
     private Integer accountFriendCount;
@@ -98,7 +97,6 @@ public class TbUserAccountEntity {
     public void setUserId(String userId) {
         this.userId = userId;
     }
-
     @Id
     @Column(name = "account")
     public String getAccount() {
@@ -127,16 +125,6 @@ public class TbUserAccountEntity {
 
     public void setAccount62A16(String account62A16) {
         this.account62A16 = account62A16;
-    }
-
-    @Basic
-    @Column(name = "account_tag")
-    public String getAccountTag() {
-        return accountTag;
-    }
-
-    public void setAccountTag(String accountTag) {
-        this.accountTag = accountTag;
     }
 
     @Basic
@@ -188,7 +176,6 @@ public class TbUserAccountEntity {
                 Objects.equals(account, that.account) &&
                 Objects.equals(accountPwd, that.accountPwd) &&
                 Objects.equals(account62A16, that.account62A16) &&
-                Objects.equals(accountTag, that.accountTag) &&
                 Objects.equals(accountState, that.accountState) &&
                 Objects.equals(accountFriendCount, that.accountFriendCount) &&
                 Objects.equals(accountWxid, that.accountWxid);
@@ -196,6 +183,6 @@ public class TbUserAccountEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(account, accountPwd, account62A16, accountTag, accountIsValid, accountState, accountFriendCount, accountWxid);
+        return Objects.hash(account, accountPwd, account62A16, accountIsValid, accountState, accountFriendCount, accountWxid);
     }
 }
