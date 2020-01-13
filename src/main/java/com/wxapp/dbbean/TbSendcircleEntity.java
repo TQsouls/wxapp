@@ -9,7 +9,7 @@ public class TbSendcircleEntity {
     private int scId;
     private String scTitle;
     private String scContent;
-    private String scPicUrl;
+    private String scPicurl;
 
     @Id
     @Column(name = "sc_id")
@@ -42,13 +42,13 @@ public class TbSendcircleEntity {
     }
 
     @Basic
-    @Column(name = "sc_picURL")
-    public String getScPicUrl() {
-        return scPicUrl;
+    @Column(name = "sc_picurl")
+    public String getScPicurl() {
+        return scPicurl;
     }
 
-    public void setScPicUrl(String scPicUrl) {
-        this.scPicUrl = scPicUrl;
+    public void setScPicurl(String scPicurl) {
+        this.scPicurl = scPicurl;
     }
 
     @Override
@@ -59,11 +59,11 @@ public class TbSendcircleEntity {
         return scId == that.scId &&
                 Objects.equals(scTitle, that.scTitle) &&
                 Objects.equals(scContent, that.scContent) &&
-                Objects.equals(scPicUrl, that.scPicUrl);
+                Objects.equals(scPicurl, that.scPicurl);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(scId, scTitle, scContent, scPicUrl);
+        return Objects.hash(scId, scTitle, scContent, scPicurl);
     }
 }

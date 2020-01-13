@@ -75,7 +75,7 @@ public class TbSysUserEntity {
     }
 
     @Basic
-    @Column(name = "user_isValid")
+    @Column(name = "user_is_valid")
     public boolean isUserIsValid() {
         return userIsValid;
     }
