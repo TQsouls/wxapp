@@ -8,8 +8,8 @@ import java.util.Objects;
 @Table(name = "tb_tag", schema = "app", catalog = "")
 public class TbTagEntity {
     private int tagId;
-    private String tagName;
     private Timestamp tagCreateDate;
+    private String tagName;
 
     @Id
     @Column(name = "tag_id")
@@ -22,16 +22,6 @@ public class TbTagEntity {
     }
 
     @Basic
-    @Column(name = "tag_name")
-    public String getTagName() {
-        return tagName;
-    }
-
-    public void setTagName(String tagName) {
-        this.tagName = tagName;
-    }
-
-    @Basic
     @Column(name = "tag_create_date")
     public Timestamp getTagCreateDate() {
         return tagCreateDate;
@@ -41,18 +31,28 @@ public class TbTagEntity {
         this.tagCreateDate = tagCreateDate;
     }
 
+    @Basic
+    @Column(name = "tag_name")
+    public String getTagName() {
+        return tagName;
+    }
+
+    public void setTagName(String tagName) {
+        this.tagName = tagName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbTagEntity that = (TbTagEntity) o;
         return tagId == that.tagId &&
-                Objects.equals(tagName, that.tagName) &&
-                Objects.equals(tagCreateDate, that.tagCreateDate);
+                Objects.equals(tagCreateDate, that.tagCreateDate) &&
+                Objects.equals(tagName, that.tagName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(tagId, tagName, tagCreateDate);
+        return Objects.hash(tagId, tagCreateDate, tagName);
     }
 }

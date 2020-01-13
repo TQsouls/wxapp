@@ -20,7 +20,7 @@ public class TbSysSetupEntity {
     }
 
     @Basic
-    @Column(name = "su_loginShreshold")
+    @Column(name = "su_login_shreshold")
     public int getSuLoginShreshold() {
         return suLoginShreshold;
     }

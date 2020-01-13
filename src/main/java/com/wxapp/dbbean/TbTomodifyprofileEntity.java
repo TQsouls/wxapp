@@ -10,7 +10,7 @@ public class TbTomodifyprofileEntity {
     private String mpNewPwd;
     private String mpNickname;
     private String mpSignature;
-    private String mpAvatarUrl;
+    private String mpAvatarurl;
 
     @Id
     @Column(name = "mp_id")
@@ -23,7 +23,7 @@ public class TbTomodifyprofileEntity {
     }
 
     @Basic
-    @Column(name = "mp_newPwd")
+    @Column(name = "mp_new_pwd")
     public String getMpNewPwd() {
         return mpNewPwd;
     }
@@ -53,13 +53,13 @@ public class TbTomodifyprofileEntity {
     }
 
     @Basic
-    @Column(name = "mp_avatarURL")
-    public String getMpAvatarUrl() {
-        return mpAvatarUrl;
+    @Column(name = "mp_avatarurl")
+    public String getMpAvatarurl() {
+        return mpAvatarurl;
     }
 
-    public void setMpAvatarUrl(String mpAvatarUrl) {
-        this.mpAvatarUrl = mpAvatarUrl;
+    public void setMpAvatarurl(String mpAvatarurl) {
+        this.mpAvatarurl = mpAvatarurl;
     }
 
     @Override
@@ -71,11 +71,11 @@ public class TbTomodifyprofileEntity {
                 Objects.equals(mpNewPwd, that.mpNewPwd) &&
                 Objects.equals(mpNickname, that.mpNickname) &&
                 Objects.equals(mpSignature, that.mpSignature) &&
-                Objects.equals(mpAvatarUrl, that.mpAvatarUrl);
+                Objects.equals(mpAvatarurl, that.mpAvatarurl);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(mpId, mpNewPwd, mpNickname, mpSignature, mpAvatarUrl);
+        return Objects.hash(mpId, mpNewPwd, mpNickname, mpSignature, mpAvatarurl);
     }
 }

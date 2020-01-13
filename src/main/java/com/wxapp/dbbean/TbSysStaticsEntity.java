@@ -22,7 +22,7 @@ public class TbSysStaticsEntity {
     }
 
     @Basic
-    @Column(name = "ss_allOnlineCount")
+    @Column(name = "ss_all_online_count")
     public int getSsAllOnlineCount() {
         return ssAllOnlineCount;
     }
@@ -32,7 +32,7 @@ public class TbSysStaticsEntity {
     }
 
     @Basic
-    @Column(name = "ss_allFriendCount")
+    @Column(name = "ss_all_friend_count")
     public int getSsAllFriendCount() {
         return ssAllFriendCount;
     }
@@ -42,7 +42,7 @@ public class TbSysStaticsEntity {
     }
 
     @Basic
-    @Column(name = "ss_allDeadCount")
+    @Column(name = "ss_all_dead_count")
     public int getSsAllDeadCount() {
         return ssAllDeadCount;
     }
