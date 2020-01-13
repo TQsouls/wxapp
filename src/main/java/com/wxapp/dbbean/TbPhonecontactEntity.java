@@ -10,7 +10,7 @@ public class TbPhonecontactEntity {
     private String phoneNumber;
     private boolean phoneHasUsed;
     private String phoneMd5;
-    private String phoneOwnWxid;
+    private String phoneOwnwxud;
     private String phoneV1;
     private String phoneV2;
 
@@ -35,7 +35,7 @@ public class TbPhonecontactEntity {
     }
 
     @Basic
-    @Column(name = "phone_hasUsed")
+    @Column(name = "phone_has_used")
     public boolean isPhoneHasUsed() {
         return phoneHasUsed;
     }
@@ -55,17 +55,17 @@ public class TbPhonecontactEntity {
     }
 
     @Basic
-    @Column(name = "phone_ownWXID")
-    public String getPhoneOwnWxid() {
-        return phoneOwnWxid;
+    @Column(name = "phone_ownwxud")
+    public String getPhoneOwnwxud() {
+        return phoneOwnwxud;
     }
 
-    public void setPhoneOwnWxid(String phoneOwnWxid) {
-        this.phoneOwnWxid = phoneOwnWxid;
+    public void setPhoneOwnwxud(String phoneOwnwxud) {
+        this.phoneOwnwxud = phoneOwnwxud;
     }
 
     @Basic
-    @Column(name = "phone_V1")
+    @Column(name = "phone_v1")
     public String getPhoneV1() {
         return phoneV1;
     }
@@ -75,7 +75,7 @@ public class TbPhonecontactEntity {
     }
 
     @Basic
-    @Column(name = "phone_V2")
+    @Column(name = "phone_v2")
     public String getPhoneV2() {
         return phoneV2;
     }
@@ -93,13 +93,13 @@ public class TbPhonecontactEntity {
                 phoneHasUsed == that.phoneHasUsed &&
                 Objects.equals(phoneNumber, that.phoneNumber) &&
                 Objects.equals(phoneMd5, that.phoneMd5) &&
-                Objects.equals(phoneOwnWxid, that.phoneOwnWxid) &&
+                Objects.equals(phoneOwnwxud, that.phoneOwnwxud) &&
                 Objects.equals(phoneV1, that.phoneV1) &&
                 Objects.equals(phoneV2, that.phoneV2);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(pcId, phoneNumber, phoneHasUsed, phoneMd5, phoneOwnWxid, phoneV1, phoneV2);
+        return Objects.hash(pcId, phoneNumber, phoneHasUsed, phoneMd5, phoneOwnwxud, phoneV1, phoneV2);
     }
 }
