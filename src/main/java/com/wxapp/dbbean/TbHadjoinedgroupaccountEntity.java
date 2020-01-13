@@ -33,7 +33,7 @@ public class TbHadjoinedgroupaccountEntity {
     }
 
     @Basic
-    @Column(name = "jga_groupId")
+    @Column(name = "jga_group_id")
     public String getJgaGroupId() {
         return jgaGroupId;
     }

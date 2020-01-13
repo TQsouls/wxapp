@@ -8,8 +8,8 @@ import java.util.Objects;
 @Table(name = "tb_group", schema = "app", catalog = "")
 public class TbGroupEntity {
     private int groupId;
-    private Timestamp groupCreateDate;
     private String groupName;
+    private Timestamp groupCreateDate;
 
     @Id
     @Column(name = "group_id")
@@ -22,16 +22,6 @@ public class TbGroupEntity {
     }
 
     @Basic
-    @Column(name = "group_create_date")
-    public Timestamp getGroupCreateDate() {
-        return groupCreateDate;
-    }
-
-    public void setGroupCreateDate(Timestamp groupCreateDate) {
-        this.groupCreateDate = groupCreateDate;
-    }
-
-    @Basic
     @Column(name = "group_name")
     public String getGroupName() {
         return groupName;
@@ -41,18 +31,28 @@ public class TbGroupEntity {
         this.groupName = groupName;
     }
 
+    @Basic
+    @Column(name = "group_create_date")
+    public Timestamp getGroupCreateDate() {
+        return groupCreateDate;
+    }
+
+    public void setGroupCreateDate(Timestamp groupCreateDate) {
+        this.groupCreateDate = groupCreateDate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TbGroupEntity that = (TbGroupEntity) o;
         return groupId == that.groupId &&
-                Objects.equals(groupCreateDate, that.groupCreateDate) &&
-                Objects.equals(groupName, that.groupName);
+                Objects.equals(groupName, that.groupName) &&
+                Objects.equals(groupCreateDate, that.groupCreateDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(groupId, groupCreateDate, groupName);
+        return Objects.hash(groupId, groupName, groupCreateDate);
     }
 }
