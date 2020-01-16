@@ -21,10 +21,31 @@ public class TbUserAccountEntity {
     private String tagName;
     private String groupName;
 
-    // a16User.getWechatAccount(), a16User.getWechatPassword(), a16User.getWechatA16Data(),
-    //                    "tag_name", "tag_id", true,
-    //                    true, 0,
-    //                    wxId, "group_name", group_id, "user_id"
+    //{
+    //    "list": [
+    //        {
+    //            "account": "1001",
+    //            "password": "pwd",
+    //            "a16_data64": "abcdsldkfj"
+    //        },
+    //        {
+    //            "account": "1001",
+    //            "password": "pwd",
+    //            "a16_data64": "abcdsldkfj"
+    //        }
+    //    ],
+    //    "user_id": "1001",
+    //    "group_id": "1001"
+    //}
+
+    public TbUserAccountEntity(String account,String accountPwd,String account62A16, int userId, Integer groupId) {
+        this.userId = userId;
+        this.groupId = groupId;
+        this.account = account;
+        this.accountPwd = accountPwd;
+        this.account62A16 = account62A16;
+    }
+
     public TbUserAccountEntity(String account, String accountPwd, String account62A16, boolean accountIsValid, Boolean accountState, Integer accountFriendCount, String accountWxid) {
         this.account = account;
         this.accountPwd = accountPwd;

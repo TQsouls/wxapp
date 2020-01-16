@@ -14,6 +14,7 @@ import com.wxapp.entity.*;
 import com.wxapp.entity.msg.ImageMeg;
 import com.wxapp.entity.msg.TextMsg;
 import com.wxapp.task.*;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +25,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
 //开发业务使用的控制器
+@Api(tags = "Api并发测试")
 @RestController
 public class DevController {
 
@@ -61,17 +63,6 @@ public class DevController {
         return returnStr;
     }
 
-    @PostMapping("/app/Login/Data62Login")
-    public String data62Login(@RequestBody List<Data62User> data62UserArrayList){
-        List<Future<String>> futureList = new ArrayList<>();
-        for (Data62User data62User : data62UserArrayList) {
-            Future<String> submit = executorService.submit(new Data62LoginTask(data62Login, data62User));
-            futureList.add(submit);
-        }
-
-        String returnStr  = data62loginJSON(futureList);
-        return returnStr;
-    }
 
     //拉取好友列表
     @PostMapping("/app/Friend/GetContractList")

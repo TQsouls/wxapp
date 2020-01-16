@@ -2,6 +2,7 @@
   * Copyright 2019 bejson.com 
   */
 package com.wxapp.jsonbean;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -10,10 +11,19 @@ import java.util.List;
  * @author bejson.com (i@bejson.com)
  * @website http://www.bejson.com/java2pojo/
  */
-public class Offline {
+public class Offline implements Serializable {
 
     private String OFLCount;
     private List<String> OFLWxids;
+
+    public Offline( ) {
+    }
+
+    public Offline(String OFLCount, List<String> OFLWxids) {
+        this.OFLCount = OFLCount;
+        this.OFLWxids = OFLWxids;
+    }
+
     public void setOFLCount(String OFLCount) {
          this.OFLCount = OFLCount;
      }
