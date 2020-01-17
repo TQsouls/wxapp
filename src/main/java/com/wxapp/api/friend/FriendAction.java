@@ -2,10 +2,7 @@ package com.wxapp.api.friend;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.wxapp.bean.FriendDelete;
-import com.wxapp.bean.FriendList;
-import com.wxapp.bean.FriendOne;
-import com.wxapp.bean.FriendVerify;
+import com.wxapp.entity.GetFriend;
 import com.wxapp.entity.GetFriendListInfo;
 import com.wxapp.util.HttpclientUtil;
 import org.springframework.stereotype.Component;
@@ -36,7 +33,18 @@ public class FriendAction {
 
     //拉取好友列表 测试成功
     public ArrayList<String> getFriendList(JSONObject friendList){
-        return JSON.parseObject(JSON.parseObject(friendList.get("Data")+"").get("Contracts")+"",ArrayList.class);
+        ArrayList arrayList = JSON.parseObject(JSON.parseObject(friendList.get("Data") + "").get("Contracts") + "", ArrayList.class);
+        arrayList.removeIf(e->!(e.toString().startsWith("wxid")));
+        return arrayList;
+    }
+
+    public ArrayList<String> getFriendList(GetFriendListInfo getFriendListInfo){
+        String getFriendsListUrl = "http://47.110.75.232:8080/api/Friend/GetContractList";
+        String postData = HttpclientUtil.doJSONPost(getFriendsListUrl, JSON.toJSONString(getFriendListInfo));
+        JSONObject friendList = JSON.parseObject(postData);
+        ArrayList arrayList = JSON.parseObject(JSON.parseObject(friendList.get("Data") + "").get("Contracts") + "", ArrayList.class);
+        arrayList.removeIf(e->!(e.toString().startsWith("wxid")));
+        return arrayList;
     }
 
     /**
@@ -51,14 +59,14 @@ public class FriendAction {
      * 请求地址：http://47.110.75.232:8080/api/Friend/AddFriendRequest
      * 测试成功
      */
-    public String addFriendRequest(FriendOne friendOne){
-        if (null == friendOne.getAntispamTicket()){
-            return null;
-        }
-        String url = "http://47.110.75.232:8080/api/Friend/AddFriendRequest";
-        String returnMsg = HttpclientUtil.doJSONPost(url,JSON.toJSONString(friendOne));
-        return returnMsg;
-    }
+//    public String addFriendRequest(FriendOne friendOne){
+//        if (null == friendOne.getAntispamTicket()){
+//            return null;
+//        }
+//        String url = "http://47.110.75.232:8080/api/Friend/AddFriendRequest";
+//        String returnMsg = HttpclientUtil.doJSONPost(url,JSON.toJSONString(friendOne));
+//        return returnMsg;
+//    }
 
     /**
      * 搜索联系人
@@ -89,56 +97,56 @@ public class FriendAction {
     public String getWxId(JSONObject jsonObject){
         return JSON.parseObject(jsonObject.get("pYInitial")+"").get("string")+"";
     }
-    /**
-     * 批量添加好友
-     * 接口地址：http://47.110.75.232:8080/api/Friend/AddFriendRequestList
-     * {
-     *   "content": "string",
-     *   "origin": 0,
-     *   "friends": [
-     *     {
-     *       "userNameV1": "string",
-     *       "antispamTicket": "string",
-     *       "origin": 0
-     *     }
-     *   ],
-     *   "wxId": "string"
-     * }
-     * 上面有根据单个好友实现批量添加的方式，这里经过测试待实现
-     * 没有足够的微信号进行测试
-     */
-    public String addFriendRequestList(FriendList friendList){
-        String url = "http://47.110.75.232:8080/api/Friend/AddFriendRequestList";
-        String addFriendRequestListResult = HttpclientUtil.doJSONPost(url, JSON.toJSONString(friendList));
-        return addFriendRequestListResult;
-    }
-
-    /**
-     * 通过好友申请
-     * http://47.110.75.232:8080/api/Friend/PassFriendVerify
-     * {
-     *   "userNameV1": "string",
-     *   "antispamTicket": "string",
-     *   "content": "string",
-     *   "origin": 0,
-     *   "wxId": "string"
-     * }
-     */
-    public boolean passFriendVerify(FriendVerify friendVerify){
-        String url = "http://47.110.75.232:8080/api/Friend/PassFriendVerify";
-        String friendVerifyResult = HttpclientUtil.doJSONPost(url, JSON.toJSONString(friendVerify));
-        return (JSON.parseObject(friendVerifyResult).get("Success")+"").equals("true");
-    }
-
-    /**
-     * 拒绝好友申请，和通过好友申请使用的参数一致，但是接口地址不同
-     * http://47.110.75.232:8080/api/Friend/RejectFriendVerify
-     */
-    public boolean rejectFriendVerify(FriendVerify friendVerify){
-        String url = "http://47.110.75.232:8080/api/Friend/RejectFriendVerify";
-        String friendVerifyResult = HttpclientUtil.doJSONPost(url, JSON.toJSONString(friendVerify));
-        return (JSON.parseObject(friendVerifyResult).get("Success")+"").equals("true");
-    }
+//    /**
+//     * 批量添加好友
+//     * 接口地址：http://47.110.75.232:8080/api/Friend/AddFriendRequestList
+//     * {
+//     *   "content": "string",
+//     *   "origin": 0,
+//     *   "friends": [
+//     *     {
+//     *       "userNameV1": "string",
+//     *       "antispamTicket": "string",
+//     *       "origin": 0
+//     *     }
+//     *   ],
+//     *   "wxId": "string"
+//     * }
+//     * 上面有根据单个好友实现批量添加的方式，这里经过测试待实现
+//     * 没有足够的微信号进行测试
+//     */
+//    public String addFriendRequestList(FriendList friendList){
+//        String url = "http://47.110.75.232:8080/api/Friend/AddFriendRequestList";
+//        String addFriendRequestListResult = HttpclientUtil.doJSONPost(url, JSON.toJSONString(friendList));
+//        return addFriendRequestListResult;
+//    }
+//
+//    /**
+//     * 通过好友申请
+//     * http://47.110.75.232:8080/api/Friend/PassFriendVerify
+//     * {
+//     *   "userNameV1": "string",
+//     *   "antispamTicket": "string",
+//     *   "content": "string",
+//     *   "origin": 0,
+//     *   "wxId": "string"
+//     * }
+//     */
+//    public boolean passFriendVerify(FriendVerify friendVerify){
+//        String url = "http://47.110.75.232:8080/api/Friend/PassFriendVerify";
+//        String friendVerifyResult = HttpclientUtil.doJSONPost(url, JSON.toJSONString(friendVerify));
+//        return (JSON.parseObject(friendVerifyResult).get("Success")+"").equals("true");
+//    }
+//
+//    /**
+//     * 拒绝好友申请，和通过好友申请使用的参数一致，但是接口地址不同
+//     * http://47.110.75.232:8080/api/Friend/RejectFriendVerify
+//     */
+//    public boolean rejectFriendVerify(FriendVerify friendVerify){
+//        String url = "http://47.110.75.232:8080/api/Friend/RejectFriendVerify";
+//        String friendVerifyResult = HttpclientUtil.doJSONPost(url, JSON.toJSONString(friendVerify));
+//        return (JSON.parseObject(friendVerifyResult).get("Success")+"").equals("true");
+//    }
 
     /**
      * 删除好友
@@ -153,13 +161,23 @@ public class FriendAction {
         return (JSON.parseObject(deleteFriendResult).get("Success")+"").equals("true");
     }
 
+//    /**
+//     * 批量删除好友
+//     * http://47.110.75.232:8080/api/Friend/BatchDeleteFriend
+//     */
+//    public boolean batchDeleteFriend(FriendDelete friendDelete){
+//        String url = "http://47.110.75.232:8080/api/Friend/BatchDeleteFriend";
+//        String batchDeleteFriendResult = HttpclientUtil.doJSONPost(url, JSON.toJSONString(friendDelete));
+//        return (JSON.parseObject(batchDeleteFriendResult).get("Success")+"").equals("true");
+//    }
+
     /**
-     * 批量删除好友
-     * http://47.110.75.232:8080/api/Friend/BatchDeleteFriend
+     * 获取新的朋友列表
+     * http://47.110.75.232:8080/api/Login/GetMFriend/{wxId}/{type}
      */
-    public boolean batchDeleteFriend(FriendDelete friendDelete){
-        String url = "http://47.110.75.232:8080/api/Friend/BatchDeleteFriend";
-        String batchDeleteFriendResult = HttpclientUtil.doJSONPost(url, JSON.toJSONString(friendDelete));
-        return (JSON.parseObject(batchDeleteFriendResult).get("Success")+"").equals("true");
+    public String getMFriend(GetFriend getFriend){
+        String url = "http://47.110.75.232:8080/api/Login/GetMFriend/"+getFriend.getWxId()+"/"+getFriend.getType();
+        String getMFriendResult = HttpclientUtil.doPost(url, null);
+        return getMFriendResult;
     }
 }

@@ -3,13 +3,15 @@
   */
 package com.wxapp.jsonbean;
 
+import java.io.Serializable;
+
 /**
  * Auto-generated: 2019-12-31 15:56:46
  *
  * @author bejson.com (i@bejson.com)
  * @website http://www.bejson.com/java2pojo/
  */
-public class Operation {
+public class Operation implements Serializable {
 
     private SendFriendMsg sendFriendMsg;
     private PostMoments postMoments;
@@ -17,6 +19,19 @@ public class Operation {
     private UploadContact uploadContact;
     private DownloadContact downloadContact;
     private InviteGroup inviteGroup;
+
+    public Operation( ) {
+    }
+
+    public Operation(SendFriendMsg sendFriendMsg, PostMoments postMoments, Modify modify, UploadContact uploadContact, DownloadContact downloadContact, InviteGroup inviteGroup) {
+        this.sendFriendMsg = sendFriendMsg;
+        this.postMoments = postMoments;
+        this.modify = modify;
+        this.uploadContact = uploadContact;
+        this.downloadContact = downloadContact;
+        this.inviteGroup = inviteGroup;
+    }
+
     public void setSendFriendMsg(SendFriendMsg sendFriendMsg) {
          this.sendFriendMsg = sendFriendMsg;
      }

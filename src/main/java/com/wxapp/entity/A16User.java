@@ -38,4 +38,13 @@ public class A16User implements Serializable {
     public void setWechatA16Data(String wechatA16Data) {
         this.wechatA16Data = wechatA16Data;
     }
+
+    @Override
+    public String toString() {
+        return "A16User{" +
+                "wechatAccount='" + wechatAccount + '\'' +
+                ", wechatPassword='" + wechatPassword + '\'' +
+                ", wechatA16Data='" + wechatA16Data + '\'' +
+                '}';
+    }
 }

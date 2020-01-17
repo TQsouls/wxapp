@@ -14,6 +14,13 @@ public class UploadContact {
     private OnlineAccount_wxid onlineAccount_wxid;
 
 
+    public UploadContact( ) {
+    }
+
+    public UploadContact(OnlineAccount_wxid onlineAccount_wxid) {
+        this.onlineAccount_wxid = onlineAccount_wxid;
+    }
+
     public OnlineAccount_wxid getOnlineAccount_wxid() {
         return onlineAccount_wxid;
     }
