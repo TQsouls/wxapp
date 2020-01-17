@@ -64,6 +64,8 @@ public class A16LoginTask implements Callable<String> {
 
 
             jedis.set("friendList:"+wxId,JSON.toJSONString(new FriendCounter(friendList.size(),friendList)));
+            jedis.sadd("login:"+group_id+":wxid",wxId);
+            jedis.sadd("allWxids",wxId);
 
             TbUserAccountEntity responseUser = new TbUserAccountEntity(
                     a16User.getWechatAccount(), a16User.getWechatPassword(), a16User.getWechatA16Data(),

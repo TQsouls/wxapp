@@ -25,4 +25,11 @@ public class AccountServiceImpl implements AccountService {
         List<TbUserAccountEntity> tbUserAccountEntities = tbUserAccountDao.saveAll(tbUserAccountEntityList);
         return "success";
     }
+
+    @Override
+    public TbUserAccountEntity deleteOneAccount(String accountWxid) {
+        TbUserAccountEntity tbUserAccountEntity = tbUserAccountDao.deleteByAccountWxid(accountWxid);
+        return tbUserAccountEntity;
+    }
+
 }

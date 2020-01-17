@@ -2,8 +2,6 @@ package com.wxapp.api.friendcycle;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.wxapp.entity.FriendCircle;
-import com.wxapp.entity.bean.FriendCircleImage;
 import com.wxapp.util.HttpclientUtil;
 import org.springframework.stereotype.Component;
 
@@ -92,11 +90,11 @@ public class FriendCircleApi {
      * }
      * 有些参数不明白
      */
-    public String sendFriendCircle(FriendCircle friendCircle){
-        String url = "http://47.110.75.232:8080/api/FriendCircle/SendFriendCircleImage";
-        String status = HttpclientUtil.doJSONPost(url, JSON.toJSONString(friendCircle));
-        return status;
-    }
+//    public String sendFriendCircle(FriendCircle friendCircle){
+//        String url = "http://47.110.75.232:8080/api/FriendCircle/SendFriendCircleImage";
+//        String status = HttpclientUtil.doJSONPost(url, JSON.toJSONString(friendCircle));
+//        return status;
+//    }
 
     /**
      * 上传朋友圈照片
@@ -110,13 +108,13 @@ public class FriendCircleApi {
      * 返回成功与否
      * 测试成功
      */
-    public boolean sendFriendCircleImage(List<String> base64s,String wxId){
-        FriendCircleImage friendCircleImage = new FriendCircleImage(base64s, wxId);
-        String url = "http://47.110.75.232:8080/api/FriendCircle/SendFriendCircleImage";
-        String status = HttpclientUtil.doJSONPost(url, JSON.toJSONString(friendCircleImage));
-        System.out.println(status);
-        return (JSON.parseObject(status).get("Success")+"").equals("true");
-    }
+//    public boolean sendFriendCircleImage(List<String> base64s,String wxId){
+//        FriendCircleImage friendCircleImage = new FriendCircleImage(base64s, wxId);
+//        String url = "http://47.110.75.232:8080/api/FriendCircle/SendFriendCircleImage";
+//        String status = HttpclientUtil.doJSONPost(url, JSON.toJSONString(friendCircleImage));
+//        System.out.println(status);
+//        return (JSON.parseObject(status).get("Success")+"").equals("true");
+//    }
 
     /**
      * POST /api/FriendCircle/SetFriendCircle

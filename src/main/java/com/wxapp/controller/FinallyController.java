@@ -2,6 +2,7 @@ package com.wxapp.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.wxapp.api.friend.FriendAction;
+import com.wxapp.api.group.GroupApi;
 import com.wxapp.api.login.A16Login;
 import com.wxapp.api.login.Data62Login;
 import com.wxapp.api.login.UnLoginApi;
@@ -12,13 +13,17 @@ import com.wxapp.requestentity.LoginRequest;
 import com.wxapp.requestentity.UnLoginRequest;
 import com.wxapp.requestentity.other.Account;
 import com.wxapp.requestentity.other.LoginUser;
+import com.wxapp.responseentity.AccountResponse;
 import com.wxapp.responseentity.LoginResponse;
 import com.wxapp.responseentity.UnLoginResponse;
+import com.wxapp.responseentity.other.ResponseAddAccountData;
 import com.wxapp.responseentity.other.ResponseUnLoginData;
 import com.wxapp.responseentity.other.ResponseUserData;
 import com.wxapp.service.AccountService;
+import com.wxapp.service.LoginService;
 import com.wxapp.task.A16LoginTask;
 import com.wxapp.task.Data62LoginTask;
+import com.wxapp.task.GroupTask;
 import com.wxapp.task.UnLoginTask;
 import com.wxapp.util.RedisUtil;
 import io.swagger.annotations.Api;
@@ -49,6 +54,8 @@ public class FinallyController {
     UnLoginApi unLoginApi;
     @Autowired
     FriendAction friendAction;
+    @Autowired
+    GroupApi groupApi;
 
     @Autowired
     RedisUtil redisUtil;//自动注入 redis
@@ -58,12 +65,20 @@ public class FinallyController {
 
     @Autowired
     AccountService accountService;
+    @Autowired
+    LoginService loginService;
 
     //一键登录多个账号
     @ApiOperation("一键登录多个账号")
     @PostMapping("/api/account/loginMulti")
     public String loginMulti(LoginRequest loginRequest){
-        List<LoginUser> list = loginRequest.getList();
+
+        List<LoginUser> list = null;
+        if (loginRequest.getRequest_type().equals("0")){
+            list = loginService.getAllByGroupId(Integer.valueOf(loginRequest.getGroup_id()));
+        }else {
+            list = loginRequest.getList();
+        }
 
         List<Future<String>> futureList = new ArrayList<>();
         //进行 a16 data62 登录
@@ -112,9 +127,19 @@ public class FinallyController {
     @PostMapping("/api/account/logout")
     public String unLogin(UnLoginRequest unLoginRequest){
         List<Future<String>> futureList = new ArrayList<>();
-        for (String wxId : unLoginRequest.getWxids()) {
-            Future<String> submit = executorService.submit(new UnLoginTask(unLoginApi, wxId));
-            futureList.add(submit);
+
+        List<String> wxIds = null;
+        if (unLoginRequest.getRequestType().equals("0")){
+            wxIds = loginService.getLoginWxidsByGroupId(Integer.valueOf(unLoginRequest.getGroupId()));
+        }else {
+            wxIds = unLoginRequest.getWxids();
+        }
+
+        if (null != wxIds) {
+            for (String wxId : wxIds) {
+                Future<String> submit = executorService.submit(new UnLoginTask(redisUtil,unLoginApi, wxId,unLoginRequest.getGroupId().toString()));
+                futureList.add(submit);
+            }
         }
         UnLoginResponse unLoginResponse = new UnLoginResponse();
         ResponseUnLoginData responseUnLoginData = new ResponseUnLoginData();
@@ -159,24 +184,75 @@ public class FinallyController {
     @ApiOperation("一键添加多个账号")
     @PostMapping("/api/account/addAccount")//这个的请求参数和登录参数一致
     public String addAccount(AddAccountRequest addAccountRequest){
+        AccountResponse accountResponse = new AccountResponse();
+        ResponseAddAccountData responseAddAccountData = new ResponseAddAccountData();
+        List<Account> success = new ArrayList<>();
+        List<Account> error = new ArrayList<>();
+
         TbUserAccountEntity tbUserAccountEntity = null;
         for (Account account : addAccountRequest.getList()) {
             tbUserAccountEntity = new TbUserAccountEntity(account.getAccount(),account.getPassword(),account.getA16Data64(),addAccountRequest.getUserId(),addAccountRequest.getGroupId());
-            accountService.saveOneAccount(tbUserAccountEntity);
+            try {
+                accountService.saveOneAccount(tbUserAccountEntity);
+                success.add(account);
+            }catch (Exception e){
+                error.add(account);
+            }
         }
-        return "success";
+        responseAddAccountData.setSuccess(success);
+        responseAddAccountData.setError(error);
+
+        accountResponse.setData(responseAddAccountData);
+        if (success.size() == 0) {
+            accountResponse.setCode(-1);
+        }else if (error.size() > 0 && success.size()>0){
+            accountResponse.setCode(1);
+        }else {
+            accountResponse.setCode(0);
+        }
+        accountResponse.setMsg("everything is ok!");
+        return JSON.toJSONString(accountResponse);
     }
 
     @ApiOperation("删除账号")
     @PostMapping("/api/account/deleteAccount")
     public String deleteAccount(DeleteAccountRequest deleteAccountRequest){
+        UnLoginResponse unLoginResponse = new UnLoginResponse();
+        ResponseUnLoginData responseUnLoginData = new ResponseUnLoginData();
+        List<String> success = new ArrayList<>();
+        List<String> error = new ArrayList<>();
 
-        return "success";
+        for (String wxid : deleteAccountRequest.getWxids()) {
+            try {
+                accountService.deleteOneAccount(wxid);
+                success.add(wxid);
+            }catch (Exception e){
+                error.add(wxid);
+            }
+        }
+        if (success.size() == 0) {
+            unLoginResponse.setCode(-1);
+        }else if (error.size() > 0 && success.size()>0){
+            unLoginResponse.setCode(1);
+        }else {
+            unLoginResponse.setCode(0);
+        }
+        responseUnLoginData.setError(error);
+        responseUnLoginData.setSuccess(success);
+        unLoginResponse.setData(responseUnLoginData);
+        unLoginResponse.setMsg("everything is ok!");
+        return JSON.toJSONString(unLoginResponse);
     }
 
     @ApiOperation("提交微信群 url")
     @PostMapping("/api/group/setGroupURL")
     public String setGroupURL(List<String> grpUrl){
+
+
+        // GroupTask 类里写加群逻辑
+        for (String url : grpUrl) {
+            Future<String> submit = executorService.submit(new GroupTask(groupApi, accountService,redisUtil, url));
+        }
 
         return "success";
     }
