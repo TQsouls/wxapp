@@ -66,7 +66,13 @@ public class Data62LoginTask implements Callable<String> {
             System.out.println(errMsg);
 
             ArrayList<String> friendList = friendAction.getFriendList(new GetFriendListInfo(wxId,0,0));
+
+
             jedis.set("friendList:"+wxId,JSON.toJSONString(new FriendCounter(friendList.size(),friendList)));
+            jedis.sadd("login:"+group_id+":wxid",wxId);
+            jedis.sadd("allWxids",wxId);
+
+
             TbUserAccountEntity responseUser = new TbUserAccountEntity(
                     data62User.getUserName(), data62User.getPassword(), data62User.getData62(),
                     true, true, friendList.size(),

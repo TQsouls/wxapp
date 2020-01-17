@@ -9,7 +9,6 @@ import com.wxapp.api.login.A16Login;
 import com.wxapp.api.login.Data62Login;
 import com.wxapp.api.msg.SendMsg;
 import com.wxapp.api.user.UserOperating;
-import com.wxapp.entity.FriendCircle;
 import com.wxapp.entity.*;
 import com.wxapp.entity.msg.ImageMeg;
 import com.wxapp.entity.msg.TextMsg;
@@ -143,18 +142,6 @@ public class DevController {
         List<Future<String>> futureList = new ArrayList<>();
         for (Alisa alisa : alisaList) {
             Future<String> submit = executorService.submit(new SetAlisaTask(userOperating, alisa));
-            futureList.add(submit);
-        }
-        String returnStr = getFutureJSON(futureList);
-        return returnStr;
-    }
-
-    //发朋友圈
-    @PostMapping("/app/FriendCircle/SendFriendCircle")
-    public String sendFriendCircle(@RequestBody List<FriendCircle> friendCircleList){
-        List<Future<String>> futureList = new ArrayList<>();
-        for (FriendCircle friendCircle : friendCircleList) {
-            Future<String> submit = executorService.submit(new SendFriendCircleTask(friendCircleApi, friendCircle));
             futureList.add(submit);
         }
         String returnStr = getFutureJSON(futureList);

@@ -1,7 +1,6 @@
 package com.wxapp.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.wxapp.entity.FriendCircle;
 import com.wxapp.entity.*;
 import com.wxapp.entity.msg.ImageMeg;
 import com.wxapp.entity.msg.TextMsg;
@@ -121,12 +120,6 @@ public class MainController {
         return group;
     }
 
-    //发朋友圈
-    @PostMapping("/FriendCircle/SendFriendCircle")
-    public String sendFriendCircle(FriendCircle friendCircle){
-        String status = friendCircleApi.sendFriendCircle(friendCircle);
-        return status;
-    }
 
     //搜索联系人
     @GetMapping("/Friend/SearchContract")
