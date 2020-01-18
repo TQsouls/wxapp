@@ -2,6 +2,7 @@
   * Copyright 2019 bejson.com 
   */
 package com.wxapp.jsonbean;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -10,13 +11,25 @@ import java.util.List;
  * @author bejson.com (i@bejson.com)
  * @website http://www.bejson.com/java2pojo/
  */
-public class Modify {
+public class Modify implements Serializable {
 
     private String newPwd;
     private String newNickname;
     private String newSignature;
     private String newAvatarURL;
     private List<String> modifiedAccount;
+
+    public Modify() {
+    }
+
+    public Modify(String newPwd, String newNickname, String newSignature, String newAvatarURL, List<String> modifiedAccount) {
+        this.newPwd = newPwd;
+        this.newNickname = newNickname;
+        this.newSignature = newSignature;
+        this.newAvatarURL = newAvatarURL;
+        this.modifiedAccount = modifiedAccount;
+    }
+
     public void setNewPwd(String newPwd) {
          this.newPwd = newPwd;
      }

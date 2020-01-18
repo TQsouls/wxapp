@@ -31,7 +31,7 @@ class WxappApplicationTests {
 
     @Test
     void contextLoads() {
-        System.out.println(tbUserAccountDao.findAll());
+        System.out.println(redisUtil.getJedis());
     }
 
 }

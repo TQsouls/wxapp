@@ -4,13 +4,13 @@ import java.io.Serializable;
 
 public class GetFriendListInfo implements Serializable {
     private String wxId;
-    private String currentWxcontactSeq;
-    private String currentChatRoomContactSeq;
+    private int currentWxcontactSeq;
+    private int currentChatRoomContactSeq;
 
     public GetFriendListInfo( ) {
     }
 
-    public GetFriendListInfo(String wxId, String currentWxcontactSeq, String currentChatRoomContactSeq) {
+    public GetFriendListInfo(String wxId, int currentWxcontactSeq, int currentChatRoomContactSeq) {
         this.wxId = wxId;
         this.currentWxcontactSeq = currentWxcontactSeq;
         this.currentChatRoomContactSeq = currentChatRoomContactSeq;
@@ -24,19 +24,19 @@ public class GetFriendListInfo implements Serializable {
         this.wxId = wxId;
     }
 
-    public String getCurrentWxcontactSeq() {
+    public int getCurrentWxcontactSeq() {
         return currentWxcontactSeq;
     }
 
-    public void setCurrentWxcontactSeq(String currentWxcontactSeq) {
+    public void setCurrentWxcontactSeq(int currentWxcontactSeq) {
         this.currentWxcontactSeq = currentWxcontactSeq;
     }
 
-    public String getCurrentChatRoomContactSeq() {
+    public int getCurrentChatRoomContactSeq() {
         return currentChatRoomContactSeq;
     }
 
-    public void setCurrentChatRoomContactSeq(String currentChatRoomContactSeq) {
+    public void setCurrentChatRoomContactSeq(int currentChatRoomContactSeq) {
         this.currentChatRoomContactSeq = currentChatRoomContactSeq;
     }
 }
