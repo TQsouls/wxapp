@@ -1,14 +1,5 @@
 package com.wxapp.entity.bean;
 
-/**
- *   {
- *  *      *       "url": "string",
- *  *      *       "imageUrl": "string",
- *  *      *       "width": 0,
- *  *      *       "height": 0,
- *  *      *       "totalSize": 0
- *  *      *     }
- */
 public class MediaInfo {
     private String url;
     private String imageUrl;

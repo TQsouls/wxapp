@@ -5,7 +5,6 @@ import com.wxapp.dbbean.TbUserAccountEntity;
 import com.wxapp.requestentity.other.LoginUser;
 import com.wxapp.service.LoginService;
 import com.wxapp.util.RedisUtil;
-import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;

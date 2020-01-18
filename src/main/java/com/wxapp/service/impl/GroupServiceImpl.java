@@ -28,7 +28,8 @@ public class GroupServiceImpl implements GroupService {
      * @return
      */
     private int i = 0;
-    private int num = 15;//添加的好友量
+    private int num = 20;//添加的好友量
+    int currentIndex;//开始时的下标
     @Override
     public List<OneUrl> distribution(List<String> urlList) {
 
@@ -43,7 +44,7 @@ public class GroupServiceImpl implements GroupService {
             Set<String> fristWxids = jedis.smembers("fristWxids");
             ArrayList<String> fristWxidList = new ArrayList<>(fristWxids);
             //获取好友列表的开始下标
-            int currentIndex = 0;
+
             for (OneUrl oneUrl : oneUrlList) {
                 String wxid = fristWxidList.get(i);
                 int friendCount = Integer.valueOf(jedis.get(wxid));
@@ -58,8 +59,9 @@ public class GroupServiceImpl implements GroupService {
                     oneUrl.currentCount += num;
                 }else {
                     //如果好友量不够，就把当前所有的好友添加进去
-                    oneUrl = doMath(oneUrl,friendCount,currentIndex,jedis,wxid,fristWxidList);
+                    oneUrl = doMath(oneUrl,friendCount,jedis,wxid,fristWxidList);
                 }
+                System.out.println(i);
             }
             return oneUrlList;
         }catch (Exception e){
@@ -67,12 +69,14 @@ public class GroupServiceImpl implements GroupService {
             return oneUrlList;
         }finally {
             jedis.close();
+            i = 0;
+            currentIndex = 0;
         }
     }
 
-    public OneUrl doMath(OneUrl oneUrl,int friendCount,int currentIndex,Jedis jedis,String wxid,ArrayList<String> fristWxidList) {
+    public OneUrl doMath(OneUrl oneUrl,int friendCount,Jedis jedis,String wxid,ArrayList<String> fristWxidList) {
 
-        if ((friendCount - currentIndex) > (num - oneUrl.currentCount)) {
+        if ((friendCount - (currentIndex+1)) > (num - oneUrl.currentCount)) {
             //当前下标加 20
             currentIndex += (num - oneUrl.currentCount);
             List<String> currentList = JSON.parseObject(jedis.get("friendList:" + wxid), List.class);
@@ -89,17 +93,18 @@ public class GroupServiceImpl implements GroupService {
         } else {
             //如果好友量不够，就把当前所有的好友添加进去
             List<String> currentList = JSON.parseObject(jedis.get("friendList:" + wxid), List.class);
-            oneUrl.currentCount += friendCount;
+            oneUrl.currentCount += (friendCount-currentIndex+1);
             oneUrl.wxIds.add(wxid);
-            oneUrl.friendList.put(wxid, currentList);
+            oneUrl.friendList.put(wxid, currentList.subList(currentIndex,currentList.size()-1));
 
             currentIndex = 0;
-            wxid = fristWxidList.get(++i);
+            i+=1;
+            wxid = fristWxidList.get(i);
             friendCount = Integer.valueOf(jedis.get(wxid));
             Set<String> fristWxids = jedis.smembers("fristWxids");
             fristWxidList = new ArrayList<>(fristWxids);
             while (oneUrl.currentCount < num) {
-                oneUrl = doMath(oneUrl, friendCount, currentIndex, jedis, wxid, fristWxidList);
+                oneUrl = doMath(oneUrl, friendCount,jedis, wxid, fristWxidList);
             }
         }
         return oneUrl;

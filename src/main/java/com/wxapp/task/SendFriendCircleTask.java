@@ -9,7 +9,7 @@ import com.alibaba.fastjson.JSON;
 import com.wxapp.api.friendcycle.FriendCircleApi;
 import com.wxapp.dbbean.TbUserAccountEntity;
 import com.wxapp.entity.FriendCircle;
-import com.wxapp.entity.bean.MediaInfo;
+import com.wxapp.entity.bean.*;
 //
 public class SendFriendCircleTask implements Callable<HashMap<String, String>> {
 
