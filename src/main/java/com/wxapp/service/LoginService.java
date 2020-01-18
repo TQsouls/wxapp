@@ -1,6 +1,7 @@
 package com.wxapp.service;
 
 import com.wxapp.dbbean.TbUserAccountEntity;
+import com.wxapp.requestentity.other.LoginUser;
 
 import java.util.List;
 
@@ -23,5 +24,6 @@ import java.util.List;
 public interface LoginService {
 
     String login(List<TbUserAccountEntity> successList);
-
+    List<LoginUser> getAllByGroupId(Integer groupId);
+    List<String> getLoginWxidsByGroupId(Integer groupId);
 }

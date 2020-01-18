@@ -1,9 +1,6 @@
 package com.wxapp.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.wxapp.entity.FriendCircle;
-import com.wxapp.entity.bean.FriendList;
-import com.wxapp.entity.bean.FriendOne;
 import com.wxapp.entity.*;
 import com.wxapp.entity.msg.ImageMeg;
 import com.wxapp.entity.msg.TextMsg;
@@ -25,7 +22,7 @@ import java.util.List;
 
 @Controller
 @RestController
-@Api(tags = "主控制器")
+@Api(tags = "基础Api测试")
 //测试 API 使用的控制器
 public class MainController {
 
@@ -123,26 +120,6 @@ public class MainController {
         return group;
     }
 
-    //发朋友圈
-    @PostMapping("/FriendCircle/SendFriendCircle")
-    public String sendFriendCircle(FriendCircle friendCircle){
-        String status = friendCircleApi.sendFriendCircle(friendCircle);
-        return status;
-    }
-
-    //批量添加好友
-    @PostMapping("/Friend/AddFriendRequestList")
-    public String addFriendRequestList(FriendList friendList){
-        String addFriendRequestListResult = friendAction.addFriendRequestList(friendList);
-        return addFriendRequestListResult;
-    }
-
-    //添加单个好友
-    @PostMapping("/Friend/AddFriendRequest")
-    public String addFriendRequest(FriendOne friendOne){
-        String addFriendRequestResult = friendAction.addFriendRequest(friendOne);
-        return addFriendRequestResult;
-    }
 
     //搜索联系人
     @GetMapping("/Friend/SearchContract")

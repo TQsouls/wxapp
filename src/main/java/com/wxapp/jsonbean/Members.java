@@ -13,6 +13,14 @@ public class Members {
 
     private Wxid1 wxid1;
 
+
+    public Members( ) {
+    }
+
+    public Members(Wxid1 wxid1) {
+        this.wxid1 = wxid1;
+    }
+
     public Wxid1 getWxid1() {
         return wxid1;
     }

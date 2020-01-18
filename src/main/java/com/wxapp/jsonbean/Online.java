@@ -2,6 +2,7 @@
   * Copyright 2019 bejson.com 
   */
 package com.wxapp.jsonbean;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -10,10 +11,19 @@ import java.util.List;
  * @author bejson.com (i@bejson.com)
  * @website http://www.bejson.com/java2pojo/
  */
-public class Online {
+public class Online implements Serializable {
 
     private String OLCount;
     private List<String> OLWxids;
+
+    public Online( ) {
+    }
+
+    public Online(String OLCount, List<String> OLWxids) {
+        this.OLCount = OLCount;
+        this.OLWxids = OLWxids;
+    }
+
     public void setOLCount(String OLCount) {
          this.OLCount = OLCount;
      }
