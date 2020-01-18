@@ -108,4 +108,7 @@ public class MarketingServiceImpl implements MarketingService {
 
 	}
 		
+	public TbSendcircleEntity findByUserId(int userId) {
+		return sendcircleDao.findByUserId(userId);
+	}
 }

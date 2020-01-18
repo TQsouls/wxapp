@@ -4,14 +4,13 @@
 package com.wxapp.controller;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.RejectedExecutionException;
 
 import com.wxapp.api.friendcycle.FriendCircleApi;
 import com.wxapp.dbbean.TbAddcontactfriendEntity;
@@ -19,8 +18,8 @@ import com.wxapp.dbbean.TbSendcircleEntity;
 import com.wxapp.dbbean.TbSendmsgEntity;
 import com.wxapp.dbbean.TbTomodifyprofileEntity;
 import com.wxapp.dbbean.TbUserAccountEntity;
-import com.wxapp.entity.FriendCircle;
 import com.wxapp.service.MarketingService;
+import com.wxapp.task.SendFriendCircleTask;
 import com.wxapp.util.PicTransUploadUtils;
 import com.wxapp.util.Result;
 
@@ -36,7 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
  *   - 设置个人信息素材（密码，昵称，个签，头像）	   已完成
  *   - 设置发送消息素材								已完成
  *   - 设置朋友圈素材								已完成
- *   - 发朋友圈（通过组）
+ *   - 发朋友圈（通过组）							已完成
  *   
  * @author 马鑫
  * @datetime 2020年1月13日 下午7:03:57
@@ -48,6 +47,8 @@ public class MarketingController {
 
 	@Autowired
 	MarketingService marketingService;
+
+	
 	
 	/**
 	 * 设置添加通讯录好友验证消息
@@ -173,6 +174,9 @@ public class MarketingController {
 	@PostMapping("sendFriendCircle")
 	public Result sendFriendCircle(@RequestBody HashMap<String, Object> map) {
 		
+		// 最大线程数
+		final int MAX_THREAD = 8;
+
 		Integer group_id = Integer.parseInt(map.get("group_id").toString());
 
 		List<TbUserAccountEntity> userList =  marketingService.findByGroupId(group_id);
@@ -186,179 +190,53 @@ public class MarketingController {
 		Integer userId = userList.get(0).getUserId();
 
 		List<String> base64s = marketingService.findImageBase64s(userId);
-
+		TbSendcircleEntity tse = marketingService.findByUserId(userId);
+		String title = tse.getScTitle();
+		String content = tse.getScContent();
+		ArrayList<Future<HashMap<String, String>>> result = new ArrayList<>();
+		
+		ExecutorService executorService = Executors.newFixedThreadPool(MAX_THREAD);
 		// 发送文字朋友圈
 		if(base64s == null || base64s.size() <= 0) {
+			for (TbUserAccountEntity user : userList) {
+				Future<HashMap<String, String>> resultMap = executorService.submit(new SendFriendCircleTask(user, title, content));
+				result.add(resultMap);
 			
+			}
 		} 
 		// 发送图片朋友圈
 		else {
 			// 将图片上传到腾讯服务器
 			List<String> passUrls = new FriendCircleApi().sendFriendCircleImage(base64s, wxid);
-		}
-		
-		
-
-
-		return Result.ok(0, "发送成功", null);
-	}
-}
-
-/**
- * 发送朋友圈多线程类
- */
-class SendFriendCircle extends Thread{
-	// 用户账号信息列表
-	private List<TbUserAccountEntity> userAccounts;
-	// 账号量
-	private int accountSize;
-	// 已经上传的图片
-	private List<String> passUrls;
-	// 标题
-	private String title;
-	// 内容
-	private String content;
-
-    private CountDownLatch count;//线程计数器
-    private HashMap<String, Object> map;//接收结果
-
-	SendFriendCircle(){};
-	SendFriendCircle(CountDownLatch count, 
-					 HashMap<String, Object> map, 
-					 List<TbUserAccountEntity> userAccounts, 
-					 String title, 
-					 String content) {
-
-		this.userAccounts = userAccounts;
-		this.accountSize = userAccounts.size();
-		this.title = title;
-		this.content = content;
-		this.count = count;
-		this.map = map;
-	}
-	SendFriendCircle(CountDownLatch count, 
-					 HashMap<String, Object> map, 
-					 List<TbUserAccountEntity> userAccounts, 
-					 List<String> passUrls, 
-					 String title, 
-					 String content) {
-
-		this.userAccounts = userAccounts;
-		this.accountSize = userAccounts.size();
-		this.passUrls = passUrls;
-		this.title = title;
-		this.content = content;
-		this.count = count;
-		this.map = map;
-	}
-
-	public void run() {
-		FriendCircleApi friendCicleApi = new FriendCircleApi();
-		FriendCircle friendCircle = new FriendCircle();
-
-		friendCircle.setTitle(title);
-		friendCircle.setContent(content);
-		// 文本朋友圈类型
-		if(this.passUrls == null) {
-			friendCircle.setType(0);
-		} 
-		// 图片朋友圈类型
-		else {
-			friendCircle.setType(1);
-		}
-		while(true) {
-			synchronized(this) {
-				if(accountSize > 0) {
-					String wxid = userAccounts.get(--accountSize).getAccountWxid();
-					friendCircle.setWxId(wxid);
-					// String result = friendCicleApi.sendFriendCircle(friendCircle);
-					// test
-					// 发送成功
-					// if((JSON.parseObject(result).get("Success")+"").equals("true")) {
-					map.put("success", userAccounts.get(accountSize).getAccount());
-					System.out.println("线程" + Thread.currentThread().getName() + ": " + userAccounts.get(accountSize).getAccount());
-					// /* 发送失败 */ else {
-						// map.put("error", userAccounts.get(accountSize).getAccount());
-					// }
-					// 减少锁存器的计数，如果计数达到零，释放所有等待的线程。 
-					count.countDown();
-				}
+			for (TbUserAccountEntity user : userList) {
+				Future<HashMap<String, String>> resultMap = executorService.submit(new SendFriendCircleTask(user, passUrls, title, content));
+				result.add(resultMap);
 			}
 		}
 		
-	}
-
-	public static void main(String[] args) {
-		//线程池堵塞队列
-        ArrayBlockingQueue<Runnable> workQueue = null;
-        //线程池队列
-        ThreadPoolExecutor pool = null;
-        //线程计数器
-		CountDownLatch end = null;
-
-		// 用于保存结果
-		HashMap<String, Object> map = new HashMap<>();
-
-		// 最大线程数
-		final int MAX_THREAD = 8;
-
-		// 账号列表
-		List<TbUserAccountEntity> userAccounts = new ArrayList<TbUserAccountEntity>();
-		TbUserAccountEntity tua1 = new TbUserAccountEntity();
-		TbUserAccountEntity tua2 = new TbUserAccountEntity();
-		TbUserAccountEntity tua3 = new TbUserAccountEntity();
-		TbUserAccountEntity tua4 = new TbUserAccountEntity();
-		TbUserAccountEntity tua5 = new TbUserAccountEntity();
-		TbUserAccountEntity tua6 = new TbUserAccountEntity();
-		tua1.setAccount("account1");
-		tua1.setAccountWxid("wxid1");
-		tua2.setAccount("account2");
-		tua2.setAccountWxid("wxid2");
-		tua3.setAccount("account3");
-		tua3.setAccountWxid("wxid3");
-		tua4.setAccount("account4");
-		tua4.setAccountWxid("wxid4");
-		tua5.setAccount("account5");
-		tua5.setAccountWxid("wxid5");
-		tua6.setAccount("account6");
-		tua6.setAccountWxid("wxid6");
-		userAccounts.add(tua1);
-		userAccounts.add(tua2);
-		userAccounts.add(tua3);
-		userAccounts.add(tua4);
-		userAccounts.add(tua5);
-		userAccounts.add(tua6);
-		
-		try {
-			// 开启线程池
-			workQueue = new ArrayBlockingQueue<Runnable>(MAX_THREAD);
-			/*  corePoolSize - 即使空闲时仍保留在池中的线程数，除非设置 allowCoreThreadTimeOut 
-				maximumPoolSize - 池中允许的最大线程数 
-				keepAliveTime - 当线程数大于核心时，这是多余的空闲线程在终止之前等待新任务的最大时间。 
-				unit - keepAliveTime参数的时间单位 
-				workQueue - 在执行任务之前用于保存任务的队列。 该队列将仅保存execute方法提交的Runnable任务。 
-			*/
-			pool = new ThreadPoolExecutor(0, MAX_THREAD, 200, TimeUnit.MILLISECONDS, workQueue);
-			//创建线程计数器
-			end = new CountDownLatch(MAX_THREAD);
-			
-			for(int i = 0; i <= MAX_THREAD; i++){
-				//创建线程
-				Thread sfc = new SendFriendCircle(end, map, userAccounts, "title-mx", "content-mx");
-				// Thread rt = new sendFriendCircle(i,end,reList);
-				//执行线程任务
-				pool.execute(sfc);
-			} 
-			//当所有线程执行完毕后才继续执行后续代码
-			end.await();
-			Object o = map.get("success");
-			// for (Object item : o) {
-				System.out.println("+++++:" + o.toString());
-			// }
-		} catch(InterruptedException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
+		HashMap<String, Object> returnData = new HashMap<>();
+		List<String> successList = new ArrayList<>();
+		List<String> errorList = new ArrayList<>();
+		for (Future<HashMap<String, String>> future : result) {
+			try {
+				if(future.get().containsKey("success")) {
+					successList.add(future.get().get("success"));
+				}
+				if(future.get().containsKey("error")) {
+					errorList.add(future.get().get("error"));
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
+		returnData.put("success", successList);
+		returnData.put("error", errorList);
+		if(successList == null || successList.size() <= 0) {
+			return Result.ok(-1, "发送失败", returnData);
+		}
+		if(errorList == null || errorList.size() <= 0) {
+			return Result.ok(0, "发送成功", returnData);
+		}
+		return Result.ok(1, "有的成功有的失败", returnData);
 	}
 }

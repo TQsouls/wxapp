@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - TestTask",
+            "request": "launch",
+            "mainClass": "com.wxapp.controller.TestTask",
+            "projectName": "wxapp"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - SendFriendCircle",
             "request": "launch",
             "mainClass": "com.wxapp.controller.SendFriendCircle",

@@ -118,16 +118,15 @@ public class FriendCircleApi {
         String status = HttpclientUtil.doJSONPost(url, JSON.toJSONString(friendCircleImage));
         List<Map<String, Object>> data = null;
         List<String> resultList = new ArrayList<>();
-        
+        System.out.println("上传图片: "+wxId);
         if((JSON.parseObject(status).get("Success")+"").equals("true")) {
             data = (List<Map<String, Object>>)JSON.parseObject(status).get("Data");
             for (Map<String, Object> item : data) {
                 Map<String, Object> typeMap = (Map<String, Object>)item.get("BufferUrl");
                 resultList.add(typeMap.get("Url").toString());
             }
-            return resultList;
         }
-        return null;
+        return resultList;
     }
 
     /**

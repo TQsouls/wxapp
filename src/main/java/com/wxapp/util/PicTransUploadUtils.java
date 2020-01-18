@@ -26,14 +26,9 @@ public class PicTransUploadUtils {
                     imgData = split[1];
                     fileExtName = split[0].split(";")[0].split(":")[1].split("/")[1];
 				}
-				// File file = new File("");
-				// String canonicalPath = file.getCanonicalPath();
 				long timeMills = System.currentTimeMillis();
-//				fileFullPath = canonicalPath+file.separator+timeMills+"."+fileExtName;
-                // String dirPath = PicTransUploadUtils.class.getResource("").getPath();
                 String dirPath = ResourceUtils.getURL("classpath:").getPath() + "update/images/";
 				fileFullPath = dirPath + timeMills + "." + fileExtName;
-                // boolean picGenRes = Base64Utils.GenerateImage(imgData, fileFullPath);  //10000.png
                 byte[] img = Base64Util.decode(imgData);
                 
                 out = new FileOutputStream(fileFullPath);
@@ -44,14 +39,6 @@ public class PicTransUploadUtils {
                     }
                 }
                 out.write(img);
-                
-// 				if(picGenRes){
-// //					String clientConf = canonicalPath+file.separator+"client.conf";
-// 					String clientConf = dirPath + "client.conf";
-// 					retAddr = FdfsUtils.fileUpload(clientConf, fileFullPath);
-// 				}else {
-// 					throw new Exception("图片转码失败，请修正后重试");
-// 				}
 			} else {
 				throw new Exception("图片转换上传方法传入参数为null或空字符串");
 			}
@@ -70,14 +57,4 @@ public class PicTransUploadUtils {
         }
         return fileFullPath;
     }
-
-    public static void main(String[] args) {
-        String a = ",abc,def,gih";
-        System.out.println(a.substring(1));
-        // String[] b = a.split(",");
-        // for (String string : b) {
-        //     System.out.println(string);
-        // }
-    }
-    
 }
