@@ -1,0 +1,7 @@
+POST http://localhost:8080/api/marketing/sendFriendCircle
+Content-Type: application/json
+User-Agent: vscode-restclient
+
+{
+    "group_id": "1"
+}
