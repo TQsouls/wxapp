@@ -1,0 +1,42 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - SendFriendCircle",
+            "request": "launch",
+            "mainClass": "com.wxapp.controller.SendFriendCircle",
+            "projectName": "wxapp"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - sendFriendCircle",
+            "request": "launch",
+            "mainClass": "com.wxapp.controller.sendFriendCircle",
+            "projectName": "wxapp"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - PicTransUploadUtils",
+            "request": "launch",
+            "mainClass": "com.wxapp.util.PicTransUploadUtils",
+            "projectName": "wxapp"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch) - Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-WxappApplication<wxapp>",
+            "request": "launch",
+            "mainClass": "com.wxapp.WxappApplication",
+            "projectName": "wxapp"
+        }
+    ]
+}

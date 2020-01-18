@@ -32,7 +32,7 @@ import java.util.List;
  *      * }
  */
 public class FriendCircle implements Serializable {
-    private String type;
+    private int type;
     private List<String> blackList;
     private List<String> withUserList;
     private List<MediaInfo> mediaInfos;
@@ -45,11 +45,11 @@ public class FriendCircle implements Serializable {
     public FriendCircle( ) {
     }
 
-    public String getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(int type) {
         this.type = type;
     }
 
