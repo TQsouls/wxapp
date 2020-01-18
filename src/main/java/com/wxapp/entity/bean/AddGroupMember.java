@@ -3,25 +3,25 @@ package com.wxapp.entity.bean;
 import java.util.List;
 
 public class AddGroupMember {
-    private String groupName;
+    private String chatRoomName;
     private List<String> toWxIds;
     private String wxId;
 
     public AddGroupMember( ) {
     }
 
-    public AddGroupMember(String groupName, List<String> toWxIds, String wxId) {
-        this.groupName = groupName;
+    public AddGroupMember(String chatRoomName, List<String> toWxIds, String wxId) {
+        this.chatRoomName = chatRoomName;
         this.toWxIds = toWxIds;
         this.wxId = wxId;
     }
 
-    public String getGroupName() {
-        return groupName;
+    public String getChatRoomName() {
+        return chatRoomName;
     }
 
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
+    public void setChatRoomName(String chatRoomName) {
+        this.chatRoomName = chatRoomName;
     }
 
     public List<String> getToWxIds() {
@@ -38,5 +38,14 @@ public class AddGroupMember {
 
     public void setWxId(String wxId) {
         this.wxId = wxId;
+    }
+
+    @Override
+    public String toString() {
+        return "AddGroupMember{" +
+                "chatRoomName='" + chatRoomName + '\'' +
+                ", toWxIds=" + toWxIds +
+                ", wxId='" + wxId + '\'' +
+                '}';
     }
 }

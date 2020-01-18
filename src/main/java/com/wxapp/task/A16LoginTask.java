@@ -63,9 +63,10 @@ public class A16LoginTask implements Callable<String> {
             ArrayList<String> friendList = friendAction.getFriendList(new GetFriendListInfo(wxId, 0, 0));
 
 
-            jedis.set("friendList:"+wxId,JSON.toJSONString(new FriendCounter(friendList.size(),friendList)));
+            jedis.set("friendList:"+wxId,JSON.toJSONString(friendList));
             jedis.sadd("login:"+group_id+":wxid",wxId);
-            jedis.sadd("allWxids",wxId);
+            jedis.sadd("fristWxids",wxId);
+            jedis.set(wxId, String.valueOf(friendList.size()));
 
             TbUserAccountEntity responseUser = new TbUserAccountEntity(
                     a16User.getWechatAccount(), a16User.getWechatPassword(), a16User.getWechatA16Data(),
@@ -75,6 +76,7 @@ public class A16LoginTask implements Callable<String> {
             );
             return JSON.toJSONString(responseUser);
         } catch (Exception e) {
+            e.printStackTrace();
             TbUserAccountEntity responseUser = new TbUserAccountEntity(
                     a16User.getWechatAccount(), a16User.getWechatPassword(), a16User.getWechatA16Data(),
                     false, false, 0,

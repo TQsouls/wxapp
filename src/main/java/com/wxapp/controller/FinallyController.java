@@ -7,6 +7,7 @@ import com.wxapp.api.login.A16Login;
 import com.wxapp.api.login.Data62Login;
 import com.wxapp.api.login.UnLoginApi;
 import com.wxapp.dbbean.TbUserAccountEntity;
+import com.wxapp.entity.addgroup.OneUrl;
 import com.wxapp.requestentity.AddAccountRequest;
 import com.wxapp.requestentity.DeleteAccountRequest;
 import com.wxapp.requestentity.LoginRequest;
@@ -20,6 +21,7 @@ import com.wxapp.responseentity.other.ResponseAddAccountData;
 import com.wxapp.responseentity.other.ResponseUnLoginData;
 import com.wxapp.responseentity.other.ResponseUserData;
 import com.wxapp.service.AccountService;
+import com.wxapp.service.GroupService;
 import com.wxapp.service.LoginService;
 import com.wxapp.task.A16LoginTask;
 import com.wxapp.task.Data62LoginTask;
@@ -30,6 +32,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -67,6 +70,8 @@ public class FinallyController {
     AccountService accountService;
     @Autowired
     LoginService loginService;
+    @Autowired
+    GroupService groupService;
 
     //一键登录多个账号
     @ApiOperation("一键登录多个账号")
@@ -244,16 +249,26 @@ public class FinallyController {
         return JSON.toJSONString(unLoginResponse);
     }
 
+    /**
+     *
+     * @param grpUrl
+     * @return
+     */
     @ApiOperation("提交微信群 url")
     @PostMapping("/api/group/setGroupURL")
-    public String setGroupURL(List<String> grpUrl){
+    public String setGroupURL(@RequestParam(value="grpUrl",required=true)List<String> grpUrl){
 
-
+        List<OneUrl> distribution = groupService.distribution(grpUrl);
+        System.out.println(distribution.size());
+        List<Future<String>> futureList = new ArrayList<>();
         // GroupTask 类里写加群逻辑
-        for (String url : grpUrl) {
-            Future<String> submit = executorService.submit(new GroupTask(groupApi, accountService,redisUtil, url));
+        for (OneUrl oneUrl : distribution) {
+            Future<String> submit = executorService.submit(new GroupTask(groupApi, oneUrl));
+            futureList.add(submit);
         }
-
+        for (Future<String> stringFuture : futureList) {
+            System.out.println(stringFuture);
+        }
         return "success";
     }
 
