@@ -8,5 +8,6 @@ import java.util.List;
 public interface GroupService {
 
     //根据群聊分配微信id
-    List<OneUrl> distribution(List<String> urlList);
+    List<OneUrl> distribution(int tagId,int opType);
+    boolean submitUrl(List<String> grpUrl);
 }

@@ -6,6 +6,7 @@ import com.wxapp.api.group.GroupApi;
 import com.wxapp.api.login.A16Login;
 import com.wxapp.api.login.Data62Login;
 import com.wxapp.api.login.UnLoginApi;
+import com.wxapp.dao.TbUserAccountDao;
 import com.wxapp.dbbean.TbUserAccountEntity;
 import com.wxapp.entity.addgroup.OneUrl;
 import com.wxapp.requestentity.AddAccountRequest;
@@ -14,12 +15,8 @@ import com.wxapp.requestentity.LoginRequest;
 import com.wxapp.requestentity.UnLoginRequest;
 import com.wxapp.requestentity.other.Account;
 import com.wxapp.requestentity.other.LoginUser;
-import com.wxapp.responseentity.AccountResponse;
-import com.wxapp.responseentity.LoginResponse;
-import com.wxapp.responseentity.UnLoginResponse;
-import com.wxapp.responseentity.other.ResponseAddAccountData;
-import com.wxapp.responseentity.other.ResponseUnLoginData;
-import com.wxapp.responseentity.other.ResponseUserData;
+import com.wxapp.responseentity.*;
+import com.wxapp.responseentity.other.*;
 import com.wxapp.service.AccountService;
 import com.wxapp.service.GroupService;
 import com.wxapp.service.LoginService;
@@ -36,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -73,6 +71,9 @@ public class FinallyController {
     @Autowired
     GroupService groupService;
 
+    @Autowired
+    TbUserAccountDao tbUserAccountDao;
+
     //一键登录多个账号
     @ApiOperation("一键登录多个账号")
     @PostMapping("/api/account/loginMulti")
@@ -90,10 +91,10 @@ public class FinallyController {
         for (LoginUser loginUser : list) {
             String a16_data62 = loginUser.getA16_data62();
             if (a16_data62.length() > 50){
-                Future<String> submit = executorService.submit(new Data62LoginTask(friendAction,redisUtil,data62Login, loginUser,loginRequest.getGroup_id()));
+                Future<String> submit = executorService.submit(new Data62LoginTask(friendAction,redisUtil,data62Login, loginUser,loginRequest.getGroup_id(),tbUserAccountDao));
                 futureList.add(submit);
             }else {
-                Future<String> submit = executorService.submit(new A16LoginTask(friendAction,redisUtil,a16Login, loginUser,loginRequest.getGroup_id()));
+                Future<String> submit = executorService.submit(new A16LoginTask(friendAction,redisUtil,a16Login, loginUser,loginRequest.getGroup_id(),tbUserAccountDao));
                 futureList.add(submit);
             }
         }
@@ -250,69 +251,35 @@ public class FinallyController {
     }
 
     /**
-     *
+     * 提交微信群 url 到缓存区
      * @param grpUrl
      * @return
      */
     @ApiOperation("提交微信群 url")
     @PostMapping("/api/group/setGroupURL")
     public String setGroupURL(@RequestParam(value="grpUrl",required=true)List<String> grpUrl){
-
-        List<OneUrl> distribution = groupService.distribution(grpUrl);
-        System.out.println(distribution.size());
-        List<Future<String>> futureList = new ArrayList<>();
-        // GroupTask 类里写加群逻辑
-        for (OneUrl oneUrl : distribution) {
-            Future<String> submit = executorService.submit(new GroupTask(groupApi, oneUrl));
-            futureList.add(submit);
-        }
-        for (Future<String> stringFuture : futureList) {
-            System.out.println(stringFuture);
-        }
-        return "success";
+        int code = groupService.submitUrl(grpUrl)?0:1;
+        SubmitUrlResponse submitUrlResponse = new SubmitUrlResponse(code,code==0?"提交成功":"提交失败");
+        return JSON.toJSONString(submitUrlResponse);
     }
 
     @ApiOperation("根据微信号标签邀请进群")
     @PostMapping("/api/group/enterGroup")
     public String enterGroup(Integer tagId,Integer opType){
 
-        return "success";
+        List<OneUrl> distribution = groupService.distribution(tagId, opType);
+        List<Future<String>> futureList = new ArrayList<>();
+        // GroupTask 类里写加群逻辑
+        AddGroupResponse addGroupResponse = new AddGroupResponse();
+        addGroupResponse.setCode(0);
+        addGroupResponse.setMsg("拉群完成");
+        List<ResponseOneGroupUrl> responseOneGroupUrlList = new ArrayList<>();
+        for (OneUrl oneUrl : distribution) {
+            Future<String> submit = executorService.submit(new GroupTask(groupApi, oneUrl));
+            futureList.add(submit);
+            responseOneGroupUrlList.add(new ResponseOneGroupUrl(oneUrl.getUrl(),oneUrl.currentCount,new ResponseOneGroup(oneUrl.currentCount-3,new Date())));
+        }
+        addGroupResponse.setData(responseOneGroupUrlList);
+        return JSON.toJSONString(addGroupResponse);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

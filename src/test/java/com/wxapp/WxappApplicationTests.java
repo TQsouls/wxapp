@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 @SpringBootTest
@@ -31,7 +32,7 @@ class WxappApplicationTests {
 
     @Test
     void contextLoads() {
-        System.out.println(redisUtil.getJedis());
+
     }
 
 }
