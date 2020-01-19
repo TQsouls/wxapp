@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.wxapp.api.friend.FriendAction;
 import com.wxapp.api.login.A16Login;
+import com.wxapp.dao.TbUserAccountDao;
 import com.wxapp.dbbean.TbUserAccountEntity;
 import com.wxapp.entity.A16User;
 import com.wxapp.entity.GetFriendListInfo;
@@ -22,6 +23,7 @@ public class A16LoginTask implements Callable<String> {
     private String group_id;
     private FriendAction friendAction;
     private RedisUtil redisUtil;
+    private TbUserAccountDao tbUserAccountDao;
 
     //应对新接口
     private LoginUser loginUser;
@@ -32,12 +34,13 @@ public class A16LoginTask implements Callable<String> {
     }
 
     //应对新接口的构造器
-    public A16LoginTask(FriendAction friendAction, RedisUtil redisUtil, A16Login a16Login, LoginUser loginUser, String group_id) {
+    public A16LoginTask(FriendAction friendAction, RedisUtil redisUtil, A16Login a16Login, LoginUser loginUser, String group_id,TbUserAccountDao tbUserAccountDao) {
         this.a16Login = a16Login;
         this.loginUser = loginUser;
         this.group_id = group_id;
         this.friendAction = friendAction;
         this.redisUtil = redisUtil;
+        this.tbUserAccountDao = tbUserAccountDao;
     }
 
     @Override
@@ -62,11 +65,15 @@ public class A16LoginTask implements Callable<String> {
             System.out.println(errMsg);
             ArrayList<String> friendList = friendAction.getFriendList(new GetFriendListInfo(wxId, 0, 0));
 
+            //默认一个号登录时候它的所有好友都是一手的
+            for (String friendWxid : friendList) {
+                jedis.sadd("friendList:" + wxId + ":first",friendWxid);
+            }
+            jedis.sadd("login:"+group_id+":wxid",wxId);//根据分组分类
+            jedis.sadd("loginList",wxId);//登录后会添加到 set 集合里
 
-            jedis.set("friendList:"+wxId,JSON.toJSONString(new FriendCounter(friendList.size(),friendList)));
-            jedis.sadd("login:"+group_id+":wxid",wxId);
-            jedis.sadd("allWxids",wxId);
-
+            //将微信id记录到数据库
+            tbUserAccountDao.updateWxidAndAccountFriendCountByAccount(wxId,friendList.size(),a16User.getWechatAccount());
             TbUserAccountEntity responseUser = new TbUserAccountEntity(
                     a16User.getWechatAccount(), a16User.getWechatPassword(), a16User.getWechatA16Data(),
                     true, true, friendList.size(),
@@ -75,6 +82,7 @@ public class A16LoginTask implements Callable<String> {
             );
             return JSON.toJSONString(responseUser);
         } catch (Exception e) {
+            e.printStackTrace();
             TbUserAccountEntity responseUser = new TbUserAccountEntity(
                     a16User.getWechatAccount(), a16User.getWechatPassword(), a16User.getWechatA16Data(),
                     false, false, 0,

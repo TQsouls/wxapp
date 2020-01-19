@@ -1,13 +1,17 @@
 package com.wxapp.api.friendcycle;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.wxapp.util.HttpclientUtil;
-import org.springframework.stereotype.Component;
-
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.wxapp.entity.FriendCircle;
+import com.wxapp.entity.bean.FriendCircleImage;
+import com.wxapp.util.HttpclientUtil;
+
+import org.springframework.stereotype.Component;
 
 @Component
 public class FriendCircleApi {
@@ -90,11 +94,11 @@ public class FriendCircleApi {
      * }
      * 有些参数不明白
      */
-//    public String sendFriendCircle(FriendCircle friendCircle){
-//        String url = "http://47.110.75.232:8080/api/FriendCircle/SendFriendCircleImage";
-//        String status = HttpclientUtil.doJSONPost(url, JSON.toJSONString(friendCircle));
-//        return status;
-//    }
+    public String sendFriendCircle(FriendCircle friendCircle){
+        String url = "http://47.110.75.232:8080/api/FriendCircle/SendFriendCircle";
+        String status = HttpclientUtil.doJSONPost(url, JSON.toJSONString(friendCircle));
+        return status;
+    }
 
     /**
      * 上传朋友圈照片
@@ -105,16 +109,25 @@ public class FriendCircleApi {
      *   ],
      *   "wxId": "string"
      * }
-     * 返回成功与否
+     * 返回url（图片url）
      * 测试成功
      */
-//    public boolean sendFriendCircleImage(List<String> base64s,String wxId){
-//        FriendCircleImage friendCircleImage = new FriendCircleImage(base64s, wxId);
-//        String url = "http://47.110.75.232:8080/api/FriendCircle/SendFriendCircleImage";
-//        String status = HttpclientUtil.doJSONPost(url, JSON.toJSONString(friendCircleImage));
-//        System.out.println(status);
-//        return (JSON.parseObject(status).get("Success")+"").equals("true");
-//    }
+    public List<String> sendFriendCircleImage(List<String> base64s,String wxId){
+        FriendCircleImage friendCircleImage = new FriendCircleImage(base64s, wxId);
+        String url = "http://47.110.75.232:8080/api/FriendCircle/SendFriendCircleImage";
+        String status = HttpclientUtil.doJSONPost(url, JSON.toJSONString(friendCircleImage));
+        List<Map<String, Object>> data = null;
+        List<String> resultList = new ArrayList<>();
+        System.out.println("上传图片: "+wxId);
+        if((JSON.parseObject(status).get("Success")+"").equals("true")) {
+            data = (List<Map<String, Object>>)JSON.parseObject(status).get("Data");
+            for (Map<String, Object> item : data) {
+                Map<String, Object> typeMap = (Map<String, Object>)item.get("BufferUrl");
+                resultList.add(typeMap.get("Url").toString());
+            }
+        }
+        return resultList;
+    }
 
     /**
      * POST /api/FriendCircle/SetFriendCircle

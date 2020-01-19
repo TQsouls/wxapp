@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.wxapp.api.friend.FriendAction;
 import com.wxapp.api.login.Data62Login;
+import com.wxapp.dao.TbUserAccountDao;
 import com.wxapp.dbbean.TbUserAccountEntity;
 import com.wxapp.entity.Data62User;
 import com.wxapp.entity.GetFriendListInfo;
@@ -21,6 +22,7 @@ public class Data62LoginTask implements Callable<String> {
     private Data62User data62User = null;
     private FriendAction friendAction;
     private RedisUtil redisUtil;
+    private TbUserAccountDao tbUserAccountDao;
 
 
     private String group_id;
@@ -33,12 +35,13 @@ public class Data62LoginTask implements Callable<String> {
         this.redisUtil = redisUtil;
     }
 
-    public Data62LoginTask(FriendAction friendAction, RedisUtil redisUtil, Data62Login data62Login, LoginUser loginUser,String group_id) {
+    public Data62LoginTask(FriendAction friendAction, RedisUtil redisUtil, Data62Login data62Login, LoginUser loginUser,String group_id,TbUserAccountDao tbUserAccountDao) {
         this.data62Login = data62Login;
         this.loginUser = loginUser;
         this.group_id = group_id;
         this.friendAction = friendAction;
         this.redisUtil = redisUtil;
+        this.tbUserAccountDao = tbUserAccountDao;
     }
 
     @Override
@@ -67,12 +70,15 @@ public class Data62LoginTask implements Callable<String> {
 
             ArrayList<String> friendList = friendAction.getFriendList(new GetFriendListInfo(wxId,0,0));
 
+            //默认一个号登录时候它的所有好友都是一手的
+            for (String friendWxid : friendList) {
+                jedis.sadd("friendList:" + wxId + ":first",friendWxid);
+            }
+            jedis.sadd("login:"+group_id+":wxid",wxId);//根据分组分类
+            jedis.sadd("loginList",wxId);//登录后会添加到 set 集合里
 
-            jedis.set("friendList:"+wxId,JSON.toJSONString(new FriendCounter(friendList.size(),friendList)));
-            jedis.sadd("login:"+group_id+":wxid",wxId);
-            jedis.sadd("allWxids",wxId);
-
-
+            //微信id记录到数据库
+            tbUserAccountDao.updateWxidAndAccountFriendCountByAccount(wxId,friendList.size(),data62User.getUserName());
             TbUserAccountEntity responseUser = new TbUserAccountEntity(
                     data62User.getUserName(), data62User.getPassword(), data62User.getData62(),
                     true, true, friendList.size(),
@@ -81,6 +87,7 @@ public class Data62LoginTask implements Callable<String> {
             );
             return JSON.toJSONString(responseUser);
         }catch (Exception e){
+            e.printStackTrace();
             TbUserAccountEntity responseUser = new TbUserAccountEntity(
                     data62User.getUserName(), data62User.getPassword(), data62User.getData62(),
                     false, false, 0,

@@ -42,6 +42,7 @@ public class FriendAction {
         String getFriendsListUrl = "http://47.110.75.232:8080/api/Friend/GetContractList";
         String postData = HttpclientUtil.doJSONPost(getFriendsListUrl, JSON.toJSONString(getFriendListInfo));
         JSONObject friendList = JSON.parseObject(postData);
+
         ArrayList arrayList = JSON.parseObject(JSON.parseObject(friendList.get("Data") + "").get("Contracts") + "", ArrayList.class);
         arrayList.removeIf(e->!(e.toString().startsWith("wxid")));
         return arrayList;

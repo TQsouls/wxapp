@@ -26,6 +26,7 @@ public class GroupApi {
     public String addGroupMember(AddGroupMember addGroupMember){
         String url = "http://47.110.75.232:8080/api/Group/AddGroupMember";
         String returnMsg = HttpclientUtil.doJSONPost(url,JSON.toJSONString(addGroupMember));
+        System.out.println(JSON.toJSONString(addGroupMember));
         System.out.println(returnMsg);
         return returnMsg;
     }
